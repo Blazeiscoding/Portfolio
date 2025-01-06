@@ -1,5 +1,5 @@
 ---
-title: Telegram
-icon: mdi:telegram
-url: https://t.me/blaze69
+title: twitter
+icon: mdi:twitter
+url: https://x.com/Blazeiscoding
 ---
