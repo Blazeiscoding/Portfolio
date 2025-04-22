@@ -1,7 +1,7 @@
 ---
 title: Music Academy
 url: https://music-academy-topaz.vercel.app
-tags: ["react", "javaScript", "AccertinityUI", "HTML", "nextjs", "lucideReact","MagicUI"]
+tags: ["react", "javaScript", "Aceternity UI", "HTML", "nextjs", "lucideReact","MagicUI"]
 date: 2024
 ---
 
