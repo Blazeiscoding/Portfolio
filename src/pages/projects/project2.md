@@ -5,4 +5,4 @@ tags: ["react", "javaScript", "Aceternity UI", "HTML", "nextjs", "lucideReact","
 date: 2024
 ---
 
-This is a frontend based project with using Accernity UI library and Lucide React.
+This is a frontend based project with using Aceternity UI library and Lucide React.
