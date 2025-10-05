@@ -7,6 +7,7 @@ pronouns: "he/him"
 website: ""
 ---
 
-Dedicated and detail-oriented Full Stack Developer with knowledge of technologies like HTML, CSS, Javascript,
-ReactJs, Tailwind CSS, and Next JS. Eager to apply proven skills for Organization in creating, and managing
-appealing User Interfaces and web Applications.
+Full-Stack Developer skilled in building scalable web applications using React, Next.js, Node.js, and modern UI frameworks.
+Experienced in developing RESTful APIs, managing databases with PostgreSQL and MongoDB, and deploying production-
+ready apps on Vercel. Focused on creating efficient, secure, and user-centric solutions with clean architecture and
+maintainable code.

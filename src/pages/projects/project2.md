@@ -1,8 +1,8 @@
 ---
-title: Music Academy
-url: https://music-academy-topaz.vercel.app
-tags: ["react", "javaScript", "Aceternity UI", "HTML", "nextjs", "lucideReact","MagicUI"]
-date: 2024
+title: Vibe Editor
+url: https://vibe-editor-sigma.vercel.app/
+tags: ["Nextjs", "Prisma", "Web Containers", "Next Auth", "Typescript", "Xterm"]
+date: 2025
 ---
 
-This is a frontend based project with using Aceternity UI library and Lucide React.
+Web-Based Development Environment,Built a modern web-based IDE with Monaco Editor for syntax highlighting and code editing.

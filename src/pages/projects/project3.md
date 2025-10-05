@@ -1,8 +1,8 @@
 ---
-title: Mystery Msg
-url: https://mystery-msg.vercel.app
-tags: ["react", "javaScript", "shadcn", "HTML", "nextjs","MongoDB","TailwindCSS"]
+title: Music Academy
+url: https://music-academy-topaz.vercel.app
+tags: ["react", "javaScript", "Aceternity UI", "HTML", "nextjs", "lucideReact","MagicUI"]
 date: 2024
 ---
 
-This is my full stack application , created with Nextjs and MongoDB. A way to convey your msgs..
+This is a frontend based project with using Aceternity UI library and Lucide React.

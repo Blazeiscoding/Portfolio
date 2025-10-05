@@ -1,8 +1,8 @@
 ---
-title: SaaS Product
-url: https://saas-project-pink.vercel.app
-tags: ["react", "javaScript", "cloudinary", "HTML", "nextjs", "CSS"]
+title: Mystery Msg
+url: https://mystery-msg.vercel.app
+tags: ["react", "javaScript", "shadcn", "HTML", "nextjs","MongoDB","TailwindCSS"]
 date: 2024
 ---
 
-This is my attempt to create an SaaS product using Cloudinary and Nextjs.
+This is my full stack application , created with Nextjs and MongoDB. A way to convey your msgs..
