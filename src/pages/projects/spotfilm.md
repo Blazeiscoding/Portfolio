@@ -1,8 +1,8 @@
 ---
-title: Mystery Msg
-url: https://mystery-msg.vercel.app
-tags: ["react", "javaScript", "shadcn", "HTML", "nextjs","MongoDB","TailwindCSS"]
+title: Note Master
+url: https://notemaster-app.vercel.app/
+tags: ["Nextjs", "TypeScript", "ShadCN","Clerk", "Bun","PostGre","TailwindCSS"]
 date: 2024
 ---
 
-This is my full stack application , created with Nextjs and MongoDB. A way to convey your msgs..
+Fed up with Notion being AI overhaul , created this for myself . Made with public with personal level encryption. Mobile First UI.
