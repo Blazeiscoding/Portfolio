@@ -44,19 +44,23 @@ const heroHighlights = [
           </div>
         </div>
       </article>
-      <div class="flex items-center justify-center self-start gap-2 rounded-full border border-base-300 px-3 py-1 bg-base-100/60">
+      <label 
+        for="theme-toggle"
+        class="flex items-center justify-center self-start gap-2 rounded-full border border-base-300 px-3 py-2 bg-base-100/60 cursor-pointer touch-manipulation active:scale-95 transition-transform duration-150"
+        aria-label="Toggle dark mode"
+      >
         <Icon name="carbon:moon" class="w-4 h-4" aria-hidden="true" />
         <input
           type="checkbox"
           data-toggle-theme="black,lofi"
           data-act-class="ACTIVECLASS"
-          class="toggle toggle-sm mx-1 bg-secondary transition-all duration-300"
+          class="toggle toggle-sm mx-1 bg-secondary theme-toggle-input"
           aria-label="Toggle dark mode"
           role="switch"
           id="theme-toggle"
         />
         <Icon name="carbon:light" class="w-4 h-4" aria-hidden="true" />
-      </div>
+      </label>
     </div>
     <section class="space-y-5 text-left">
       <article class="prose prose-sm md:prose max-w-none text-base-content/80 leading-relaxed">
@@ -84,3 +88,25 @@ const heroHighlights = [
     </section>
   </div>
 </header>
+
+<style>
+  .theme-toggle-input {
+    -webkit-tap-highlight-color: transparent;
+    /* Let Chromium handle transitions naturally */
+  }
+  
+  /* Ensure smooth toggle animation on mobile */
+  @media (max-width: 768px) {
+    label[for="theme-toggle"] {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+  }
+  
+  /* Prevent double-tap zoom on toggle */
+  label[for="theme-toggle"] {
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+  }
+</style>

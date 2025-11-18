@@ -28,7 +28,7 @@ const sameAsLinks = [
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         const theme = savedTheme || (prefersDark ? "black" : "lofi");
         document.documentElement.setAttribute("data-theme", theme);
-        document.documentElement.style.transition = "background-color 0.3s ease, color 0.3s ease";
+        // No transition on initial load for instant theme application
         
         // Set checkbox state
         const isDark = theme === "black";
@@ -40,27 +40,40 @@ const sameAsLinks = [
       })();
     </script>
     <script>
-      import { themeChange } from "theme-change";
-      themeChange();
-      
-      // Smooth theme transitions
+      // Custom smooth theme handler - bypass theme-change for better control
       document.addEventListener("DOMContentLoaded", () => {
         const themeToggle = document.querySelector('[data-toggle-theme]') as HTMLInputElement;
-        if (themeToggle) {
-          // Set initial state
-          const currentTheme = document.documentElement.getAttribute("data-theme");
-          themeToggle.checked = currentTheme === "black";
-          themeToggle.setAttribute("aria-checked", (currentTheme === "black").toString());
+        if (!themeToggle) return;
+        
+        // Set initial state
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        themeToggle.checked = currentTheme === "black";
+        themeToggle.setAttribute("aria-checked", (currentTheme === "black").toString());
+        
+        // Ultra-smooth theme change using View Transition API for Chromium
+        const applyTheme = async (isDark: boolean) => {
+          const newTheme = isDark ? "black" : "lofi";
           
-          themeToggle.addEventListener('change', (e) => {
-            const target = e.target as HTMLInputElement;
-            const isDark = target.checked;
-            const newTheme = isDark ? "black" : "lofi";
+          // Check if View Transition API is supported (Chromium)
+          if (document.startViewTransition) {
+            document.startViewTransition(() => {
+              localStorage.setItem("theme", newTheme);
+              document.documentElement.setAttribute("data-theme", newTheme);
+            });
+          } else {
+            // Fallback for Firefox and older browsers
             localStorage.setItem("theme", newTheme);
             document.documentElement.setAttribute("data-theme", newTheme);
-            target.setAttribute("aria-checked", isDark.toString());
-          });
-        }
+          }
+        };
+        
+        // Single event handler to avoid duplicate calls
+        themeToggle.addEventListener('change', (e) => {
+          const target = e.target as HTMLInputElement;
+          const isDark = target.checked;
+          applyTheme(isDark);
+          target.setAttribute("aria-checked", isDark.toString());
+        });
       });
     </script>
     <meta charset="utf-8" />
@@ -166,16 +179,41 @@ const sameAsLinks = [
 </html>
 
 <style is:global>
-  * {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-  }
-  
   html {
     scroll-behavior: smooth;
+    color-scheme: light dark;
   }
   
   body {
     font-family: "DM Sans Variable", sans-serif;
+    min-height: 100vh;
+  }
+  
+  /* View Transition API - ultra-smooth for Chromium */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Fallback transitions for Firefox and browsers without View Transition API */
+  @supports not (view-transition-name: none) {
+    html, body,
+    header, main, footer,
+    .card, .btn, .badge,
+    .prose, .collapse,
+    article, section,
+    div, p, h1, h2, h3, h4, h5, h6 {
+      transition: background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                  color 0.35s cubic-bezier(0.4, 0, 0.2, 1), 
+                  border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Exclude interactive elements */
+    input, button, a, img, svg, video, iframe,
+    .toggle, input[type="checkbox"], input[type="radio"] {
+      transition: none !important;
+    }
   }
   
   /* Smooth fade-in animation */
