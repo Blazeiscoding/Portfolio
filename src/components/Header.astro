@@ -1,53 +1,86 @@
 ---
 import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
+const resumeUrl = "/MyResume.pdf";
+const heroHighlights = [
+  "Production-ready React & Next.js apps",
+  "API design with Node, Express & PostgreSQL",
+  "Accessible design systems & DX tooling"
+];
 ---
 
-<header class="mx-auto pt-6 pb-2 relative fade-in-up">
-  <article
-    class="flex flex-col md:flex-col items-center gap-4 w-full max-w-2xl"
-  >
-    <div
-      class="flex-shrink-0 w-24 md:w-28 rounded-full shadow-lg ring-4 ring-primary/20 hover:ring-primary/40 transition-all duration-500 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 p-1"
-    >
-      <img
-        alt={`${about.frontmatter.name} profile picture`}
-        src="/profile.webp"
-        class="grayscale-[30] hover:grayscale-0 transition-all duration-500 rounded-full w-full h-full object-cover"
-        width="112"
-        height="112"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
-
-    <div class="text-center">
-      <div class="flex flex-wrap justify-center items-center gap-3 mb-3">
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          {about.frontmatter.name}
-        </h1>
-        <div class="badge badge-sm badge-primary/20 text-primary border-primary/30 text-xs font-medium px-3 py-1">
-          {about.frontmatter.pronouns}
+<header class="mx-auto pt-6 pb-4 relative fade-in-up w-[95vw] max-w-3xl px-4">
+  <div class="rounded-3xl border border-base-300/60 bg-base-100/80 backdrop-blur supports-[backdrop-filter]:backdrop-blur-lg p-6 shadow-lg space-y-6">
+    <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <article class="flex flex-col sm:flex-row items-center gap-4 w-full">
+        <div
+          class="flex-shrink-0 w-24 md:w-28 rounded-full shadow-lg ring-4 ring-primary/20 hover:ring-primary/40 transition-all duration-500 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 p-1"
+        >
+          <img
+            alt={`${about.frontmatter.name} profile picture`}
+            src="/profile.webp"
+            class="grayscale-[30] hover:grayscale-0 transition-all duration-500 rounded-full w-full h-full object-cover"
+            width="112"
+            height="112"
+            loading="eager"
+            decoding="async"
+          />
         </div>
-      </div>
-      <h2 class="text-lg md:text-xl mb-3 text-base-content font-semibold">
-        {about.frontmatter.designation}
-      </h2>
-      <div class="flex items-center justify-center mt-1">
-        <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
-        <p class="text-sm text-secondary" aria-label={`Location: ${about.frontmatter.location}`}>{about.frontmatter.location}</p>
+        <div class="text-center sm:text-left">
+          <div class="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-3">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              {about.frontmatter.name}
+            </h1>
+            <div class="badge badge-sm badge-primary/20 text-primary border-primary/30 text-xs font-medium px-3 py-1">
+              {about.frontmatter.pronouns}
+            </div>
+          </div>
+          <h2 class="text-lg md:text-xl mb-2 text-base-content font-semibold">
+            {about.frontmatter.designation}
+          </h2>
+          <div class="flex items-center justify-center sm:justify-start mt-1 text-secondary">
+            <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
+            <p class="text-sm" aria-label={`Location: ${about.frontmatter.location}`}>{about.frontmatter.location}</p>
+          </div>
+        </div>
+      </article>
+      <div class="flex items-center justify-center self-start gap-2 rounded-full border border-base-300 px-3 py-1 bg-base-100/60">
+        <Icon name="carbon:moon" class="w-4 h-4" aria-hidden="true" />
+        <input
+          type="checkbox"
+          data-toggle-theme="black,lofi"
+          data-act-class="ACTIVECLASS"
+          class="toggle toggle-sm mx-1 bg-secondary transition-all duration-300"
+          aria-label="Toggle dark mode"
+          role="switch"
+          id="theme-toggle"
+        />
+        <Icon name="carbon:light" class="w-4 h-4" aria-hidden="true" />
       </div>
     </div>
-  </article>
+    <section class="space-y-5 text-left">
+      <article class="prose prose-sm md:prose max-w-none text-base-content/80 leading-relaxed">
+        <Fragment set:html={about.compiledContent()} />
+      </article>
+      <div class="flex flex-wrap gap-2">
+        {heroHighlights.map((item) => (
+          <span class="px-3 py-1.5 rounded-full text-xs md:text-sm font-medium bg-primary/10 text-primary border border-primary/20">
+            {item}
+          </span>
+        ))}
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href={resumeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-outline btn-sm md:btn-md gap-2"
+          aria-label="Download resume PDF (opens in new tab)"
+        >
+          <Icon name="carbon:document-pdf" class="w-4 h-4" aria-hidden="true" />
+          Resume
+        </a>
+      </div>
+    </section>
+  </div>
 </header>
-
-<style>
-  @media (max-width: 768px) {
-    .flex-col.justify-end {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-  }
-</style>

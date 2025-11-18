@@ -1,7 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
 import AccordionLayout from "../layouts/AccordionLayout.astro";
-import * as about from "../pages/about/about.md";
 import Card from "./Card.astro";
 import ContactCard from "./ContactCard.astro";
 import Skills from "./Skills.astro";
@@ -34,115 +33,88 @@ const sortedProjects = sortByDate(projects);
 const sortedStudies = sortByDate(studies);
 ---
 
-<div class="join join-vertical gap-1">
-  <AccordionLayout title={"About"} icon={"carbon:identification"}>
-    <article class="text-justify">
-      <Fragment set:html={about.compiledContent()} />
-    </article>
-  </AccordionLayout>
+<div class="join join-vertical gap-4">
+  <section id="skills" class="scroll-mt-32">
+    <AccordionLayout title={"Skills"} icon={"carbon:skill-level"}>
+      <Skills />
+    </AccordionLayout>
+  </section>
 
-  <AccordionLayout title={"Skills"} icon={"carbon:skill-level"}>
-    <Skills />
-  </AccordionLayout>
-
-  <AccordionLayout title={"Work"} icon={"carbon:construction"}>
-    {
-      sortedWorks.map((item) => {
-        return (
-          <Card
-            title={item.frontmatter.title}
-            timeframe={item.frontmatter.date}
-            description={item.compiledContent()}
-            tags={item.frontmatter.tags}
-            url={item.frontmatter.url}
-            url_name={item.frontmatter.org}
-            location={item.frontmatter.location}
-          />
-        );
-      })
-    }
-  </AccordionLayout>
-
-  <AccordionLayout title={"Studies"} icon={"carbon:education"}>
-    {
-      sortedStudies.map((item) => {
-        return (
-          <Card
-            title={item.frontmatter.title}
-            timeframe={item.frontmatter.date}
-            location={item.frontmatter.location}
-            tags={item.frontmatter.tags}
-            url={item.url}
-            url_name={item.frontmatter.institute}
-          />
-        );
-      })
-    }
-  </AccordionLayout>
-
-  <AccordionLayout title={"Projects"} icon={"carbon:tools"}>
-    {
-      sortedProjects.map((item) => {
-        return (
-          <Card
-            title={item.frontmatter.title}
-            timeframe={item.frontmatter.date}
-            description={item.compiledContent()}
-            tags={item.frontmatter.tags}
-            url={item.frontmatter.url}
-            url_name={"View project"}
-            image={item.frontmatter.image}
-            github={item.frontmatter.github}
-          />
-        );
-      })
-    }
-  </AccordionLayout>
-
-  
-
-  <AccordionLayout title={"Files"} icon={"carbon:volume-file-storage"}>
-    <div class="flex justify-center w-full">
-      <div
-        class="card card-compact card-bordered border-[oklch(var(--s))] w-96 md:w-112 lg:w-128 hover:shadow-lg transition-all"
-      >
-        <figure>
-          <object data={PDF} type="application/pdf" width="100%"></object>
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title">Resume</h2>
-          <p>View and download my resume by clicking on the button below</p>
-          <div class="card-actions justify-end">
-            <a 
-              target="_blank" 
-              rel="noopener noreferrer"
-              href={PDF}
-              aria-label="Download resume PDF (opens in new tab)"
-            >
-              <button class="btn btn-outline" type="button">
-                <p>Download resume</p>
-                <Icon name="carbon:document-pdf" class="w-6 h-6 ml-1" aria-hidden="true" />
-              </button>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </AccordionLayout>
-
-  <AccordionLayout title={"Contact"} icon={"carbon:location-person"}>
-    <div class="flex flex-wrap content-around gap-4 justify-center">
+  <section id="work" class="scroll-mt-32">
+    <AccordionLayout title={"Work"} icon={"carbon:construction"}>
       {
-        contact.map((item) => {
+        sortedWorks.map((item) => {
           return (
-            <ContactCard
+            <Card
+              title={item.frontmatter.title}
+              timeframe={item.frontmatter.date}
+              description={item.compiledContent()}
+              tags={item.frontmatter.tags}
               url={item.frontmatter.url}
-              url_name={item.frontmatter.title}
-              icon={item.frontmatter.icon}
+              url_name={item.frontmatter.org}
+              location={item.frontmatter.location}
             />
           );
         })
       }
-    </div>
-  </AccordionLayout>
+    </AccordionLayout>
+  </section>
+
+  <section id="studies" class="scroll-mt-32">
+    <AccordionLayout title={"Studies"} icon={"carbon:education"}>
+      {
+        sortedStudies.map((item) => {
+          return (
+            <Card
+              title={item.frontmatter.title}
+              timeframe={item.frontmatter.date}
+              location={item.frontmatter.location}
+              tags={item.frontmatter.tags}
+              url={item.url}
+              url_name={item.frontmatter.institute}
+            />
+          );
+        })
+      }
+    </AccordionLayout>
+  </section>
+
+  <section id="projects" class="scroll-mt-32">
+    <AccordionLayout title={"Projects"} icon={"carbon:tools"}>
+      {
+        sortedProjects.map((item) => {
+          return (
+            <Card
+              title={item.frontmatter.title}
+              timeframe={item.frontmatter.date}
+              description={item.compiledContent()}
+              tags={item.frontmatter.tags}
+              url={item.frontmatter.url}
+              url_name={"View project"}
+              image={item.frontmatter.image}
+              github={item.frontmatter.github}
+            />
+          );
+        })
+      }
+    </AccordionLayout>
+  </section>
+
+  <section id="contact" class="scroll-mt-32">
+    <AccordionLayout title={"Contact"} icon={"carbon:location-person"}>
+      <div class="flex flex-wrap content-around gap-4 justify-center">
+        {
+          contact.map((item) => {
+            return (
+              <ContactCard
+                url={item.frontmatter.url}
+                url_name={item.frontmatter.title}
+                icon={item.frontmatter.icon}
+              />
+            );
+          })
+        }
+      </div>
+    </AccordionLayout>
+  </section>
 </div>

@@ -35,8 +35,8 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
     </figure>
   )}
   <div class="card-body">
-    <div class="grid grid-cols-3 gap-4 mb-2">
-      <div class="self-start col-span-2 justify-self-start text-left">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+      <div class="self-start md:col-span-2 justify-self-start text-left">
         <h2 class="card-title font-bold text-xl md:text-2xl mb-1 text-base-content">{title}</h2>
         {location && (
           <div class="flex items-center mt-2">
@@ -46,7 +46,7 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
         )}
       </div>
 
-      <div class="self-center justify-self-end">
+      <div class="self-center md:justify-self-end">
         {timeframe && (
           <div class="badge badge-sm badge-primary font-mono text-xs px-3 py-2 shadow-sm">
             {timeframe}
@@ -55,8 +55,8 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
       </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-4 place-items-center">
-      <div class="self-start col-span-2 justify-self-start text-left">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 place-items-stretch">
+      <div class="self-start md:col-span-2 justify-self-start text-left">
         <article class="prose prose-sm max-w-none text-base-content/70 leading-relaxed my-2">
           <Fragment set:html={description}></Fragment>
         </article>
@@ -76,7 +76,7 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
         )}
       </div>
 
-      <div class="self-center justify-self-end flex flex-col gap-2 items-end">
+      <div class="self-stretch md:justify-self-end flex flex-col gap-2 items-stretch md:items-end">
         {url && url !== "#" && (
           <a 
             href={url} 
