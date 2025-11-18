@@ -4,7 +4,7 @@ url: https://notemaster-app.vercel.app/
 github: https://github.com/Blazeiscoding/notemaster-app
 tags:
   ["Nextjs", "TypeScript", "ShadCN", "Clerk", "Bun", "PostGre", "TailwindCSS"]
-date: 2024
+date: 2025
 image: /notemaster-portfolio.webp
 ---
 

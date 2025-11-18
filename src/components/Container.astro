@@ -10,6 +10,28 @@ const projects = await Astro.glob("../pages/projects/*.md");
 const studies = await Astro.glob("../pages/studies/*.md");
 const contact = await Astro.glob("../pages/contact/*.md");
 const PDF = "/MyResume.pdf";
+
+// Sort by date (newest first) - extract year from date string
+const sortByDate = (items: any[]) => {
+  return items.sort((a, b) => {
+    const dateA = a.frontmatter.date || "";
+    const dateB = b.frontmatter.date || "";
+    
+    // Convert to string if it's a number
+    const dateAStr = String(dateA);
+    const dateBStr = String(dateB);
+    
+    // Extract year (assumes format like "2024" or "2024 - Present")
+    const yearA = parseInt(dateAStr.split(" - ")[0]) || 0;
+    const yearB = parseInt(dateBStr.split(" - ")[0]) || 0;
+    
+    return yearB - yearA; // Descending order (newest first)
+  });
+};
+
+const sortedWorks = sortByDate(works);
+const sortedProjects = sortByDate(projects);
+const sortedStudies = sortByDate(studies);
 ---
 
 <div class="join join-vertical gap-1">
@@ -25,7 +47,7 @@ const PDF = "/MyResume.pdf";
 
   <AccordionLayout title={"Work"} icon={"carbon:construction"}>
     {
-      works.map((item) => {
+      sortedWorks.map((item) => {
         return (
           <Card
             title={item.frontmatter.title}
@@ -43,7 +65,7 @@ const PDF = "/MyResume.pdf";
 
   <AccordionLayout title={"Studies"} icon={"carbon:education"}>
     {
-      studies.map((item) => {
+      sortedStudies.map((item) => {
         return (
           <Card
             title={item.frontmatter.title}
@@ -60,7 +82,7 @@ const PDF = "/MyResume.pdf";
 
   <AccordionLayout title={"Projects"} icon={"carbon:tools"}>
     {
-      projects.map((item) => {
+      sortedProjects.map((item) => {
         return (
           <Card
             title={item.frontmatter.title}

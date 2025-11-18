@@ -6,10 +6,17 @@ import Header from "../components/Header.astro";
 import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
 
-const siteUrl = "https://nikhilrathore.com"; // Update with your actual URL
+const siteUrl = "https://nikhilrathore.com";
 const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
 const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. Full-Stack Developer skilled in building scalable web applications using React, Next.js, Node.js, and modern UI frameworks. Experienced in developing RESTful APIs, managing databases with PostgreSQL and MongoDB, and deploying production-ready apps.`;
 const imageUrl = `${siteUrl}/profile.webp`;
+
+// Get contact links for structured data
+const contactLinks = await Astro.glob("../pages/contact/*.md");
+const sameAsLinks = [
+  "https://github.com/Blazeiscoding",
+  ...contactLinks.map(item => item.frontmatter.url).filter(Boolean)
+];
 ---
 
 <html lang="en">
@@ -90,6 +97,27 @@ const imageUrl = `${siteUrl}/profile.webp`;
     <!-- Additional SEO -->
     <link rel="canonical" href={siteUrl} />
     <meta name="theme-color" content="#ffffff" />
+    
+    <!-- Resource Hints for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": about.frontmatter.name,
+      "jobTitle": about.frontmatter.designation,
+      "url": siteUrl,
+      "sameAs": sameAsLinks,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": about.frontmatter.location.split(",")[1]?.trim() || about.frontmatter.location,
+        "addressCountry": "IN"
+      },
+      "image": imageUrl,
+      "description": description
+    })} />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header />
