@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import ShareButtons from "./ShareButtons.astro";
 const { timeframe, title, description, url, tags, url_name, location, image, github } =
   Astro.props;
 ---
@@ -65,6 +66,13 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
               <span class="badge text-center inline-block align-middle w-max h-max text-sm  badge-outline shadow-md mb-1" :key={item}>{item}</span>
             ))}
           </div>
+        )}
+        {url && url !== "#" && (
+          <ShareButtons 
+            title={title} 
+            url={url} 
+            description={description ? String(description).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 200) : ''} 
+          />
         )}
       </div>
 

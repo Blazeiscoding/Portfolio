@@ -1,0 +1,143 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface ShareButtonsProps {
+  title: string;
+  url: string;
+  description?: string;
+}
+
+const { title, url, description = "" } = Astro.props;
+
+const encodedTitle = encodeURIComponent(title);
+const encodedUrl = encodeURIComponent(url);
+const encodedDescription = encodeURIComponent(description);
+
+const shareLinks = {
+  twitter: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
+  linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  reddit: `https://reddit.com/submit?title=${encodedTitle}&url=${encodedUrl}`,
+  copy: url, // For copy to clipboard
+};
+---
+
+<div class="share-buttons flex flex-wrap gap-2 mt-2">
+  <a
+    href={shareLinks.twitter}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn btn-sm btn-ghost gap-2"
+    aria-label={`Share ${title} on Twitter`}
+    title="Share on Twitter"
+  >
+    <Icon name="carbon:logo-twitter" class="w-4 h-4" aria-hidden="true" />
+    <span class="hidden sm:inline">Twitter</span>
+  </a>
+  
+  <a
+    href={shareLinks.linkedin}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn btn-sm btn-ghost gap-2"
+    aria-label={`Share ${title} on LinkedIn`}
+    title="Share on LinkedIn"
+  >
+    <Icon name="carbon:logo-linkedin" class="w-4 h-4" aria-hidden="true" />
+    <span class="hidden sm:inline">LinkedIn</span>
+  </a>
+  
+  <a
+    href={shareLinks.facebook}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="btn btn-sm btn-ghost gap-2"
+    aria-label={`Share ${title} on Facebook`}
+    title="Share on Facebook"
+  >
+    <Icon name="carbon:logo-facebook" class="w-4 h-4" aria-hidden="true" />
+    <span class="hidden sm:inline">Facebook</span>
+  </a>
+  
+  <button
+    type="button"
+    class="btn btn-sm btn-ghost gap-2 copy-link-btn"
+    aria-label={`Copy link to ${title}`}
+    title="Copy link"
+    data-url={url}
+  >
+    <Icon name="carbon:link" class="w-4 h-4" aria-hidden="true" />
+    <span class="hidden sm:inline">Copy Link</span>
+  </button>
+</div>
+
+<script>
+  // Copy to clipboard functionality
+  document.addEventListener("DOMContentLoaded", () => {
+    const copyButtons = document.querySelectorAll(".copy-link-btn");
+    
+    copyButtons.forEach((button) => {
+      button.addEventListener("click", async () => {
+        const url = button.getAttribute("data-url");
+        if (!url) return;
+        
+        try {
+          await navigator.clipboard.writeText(url);
+          
+          // Visual feedback
+          const originalText = button.innerHTML;
+          button.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="hidden sm:inline">Copied!</span>
+          `;
+          button.classList.add("btn-success");
+          
+          setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove("btn-success");
+          }, 2000);
+        } catch (err) {
+          console.error("Failed to copy:", err);
+          // Fallback for older browsers
+          const textArea = document.createElement("textarea");
+          textArea.value = url;
+          document.body.appendChild(textArea);
+          textArea.select();
+          try {
+            document.execCommand("copy");
+            button.innerHTML = `
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span class="hidden sm:inline">Copied!</span>
+            `;
+            setTimeout(() => {
+              button.innerHTML = originalText;
+            }, 2000);
+          } catch (fallbackErr) {
+            console.error("Fallback copy failed:", fallbackErr);
+          }
+          document.body.removeChild(textArea);
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .share-buttons .btn {
+    transition: all 0.2s ease;
+  }
+  
+  .share-buttons .btn:hover {
+    transform: translateY(-1px);
+  }
+  
+  .copy-link-btn.btn-success {
+    background-color: oklch(var(--su));
+    color: oklch(var(--suc));
+  }
+</style>
+
