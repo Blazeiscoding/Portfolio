@@ -1,0 +1,75 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Skill {
+  name: string;
+  icon: string;
+  category: "Frontend" | "Backend" | "Database" | "Tools" | "Language";
+}
+
+const skills: Skill[] = [
+  // Languages
+  { name: "TypeScript", icon: "carbon:script", category: "Language" },
+  { name: "JavaScript", icon: "carbon:code", category: "Language" },
+  
+  // Frontend
+  { name: "React", icon: "carbon:application", category: "Frontend" },
+  { name: "Next.js", icon: "carbon:arrow-right", category: "Frontend" },
+  { name: "Tailwind CSS", icon: "carbon:code", category: "Frontend" },
+  { name: "ShadCN", icon: "carbon:layers", category: "Frontend" },
+  
+  // Backend
+  { name: "Node.js", icon: "carbon:application", category: "Backend" },
+  { name: "Express.js", icon: "carbon:application", category: "Backend" },
+  { name: "RESTful APIs", icon: "carbon:api", category: "Backend" },
+  
+  // Database
+  { name: "PostgreSQL", icon: "carbon:data-base", category: "Database" },
+  { name: "MongoDB", icon: "carbon:data-base", category: "Database" },
+  
+  // Tools
+  { name: "Vercel", icon: "carbon:cloud", category: "Tools" },
+  { name: "Git", icon: "carbon:logo-github", category: "Tools" },
+];
+
+const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as const;
+---
+
+<div class="skills-container">
+  {categories.map((category) => {
+    const categorySkills = skills.filter((skill) => skill.category === category);
+    if (categorySkills.length === 0) return null;
+    
+    return (
+      <div class="skill-category mb-6">
+        <h3 class="text-lg font-semibold mb-3 text-primary">{category}</h3>
+        <div class="flex flex-wrap gap-3">
+          {categorySkills.map((skill) => (
+            <div
+              class="skill-badge group flex items-center gap-2 px-4 py-2 rounded-lg border border-[oklch(var(--s))] hover:border-primary hover:shadow-md transition-all duration-300 cursor-default"
+              data-skill={skill.name}
+            >
+              <Icon 
+                name={skill.icon} 
+                class="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300" 
+                aria-hidden="true"
+              />
+              <span class="text-sm font-medium">{skill.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+<style>
+  .skill-badge {
+    background: oklch(var(--b2));
+  }
+  
+  .skill-badge:hover {
+    transform: translateY(-2px);
+  }
+</style>
+

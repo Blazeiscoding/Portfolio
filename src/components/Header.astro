@@ -3,7 +3,7 @@ import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
 ---
 
-<header class="mx-auto pt-6 pb-2 relative">
+<header class="mx-auto pt-6 pb-2 relative fade-in-up">
   <article
     class="flex flex-col md:flex-col items-center gap-4 w-full max-w-2xl"
   >
@@ -11,31 +11,31 @@ import * as about from "../pages/about/about.md";
       class="flex-shrink-0 w-20 md:w-24 rounded-full shadow-sm overflow-hidden"
     >
       <img
-        alt="avatar"
+        alt={`${about.frontmatter.name} profile picture`}
         src="/profile.webp"
-        class="grayscale-[50] hover:grayscale-0"
+        class="grayscale-[50] hover:grayscale-0 transition-all duration-500 rounded-full"
+        width="96"
+        height="96"
+        loading="eager"
+        decoding="async"
       />
     </div>
 
     <div class="text-center">
-      <div
-        class="flex justify-center md:justify-between items-center mb-2 relative"
-      >
-        <h1 class="text-3xl font-extrabold tracking-tight md:text-3xl relative">
+      <div class="flex flex-wrap justify-center items-center gap-3 mb-2">
+        <h1 class="text-3xl font-extrabold tracking-tight md:text-3xl">
           {about.frontmatter.name}
-          <div class="absolute top-0 left-full ml-2 -mt-4">
-            <div class="badge w-max text-sm font-light badge-outline shadow-lg">
-              {about.frontmatter.pronouns}
-            </div>
-          </div>
         </h1>
+        <div class="badge w-max text-sm font-light badge-outline shadow-lg">
+          {about.frontmatter.pronouns}
+        </div>
       </div>
       <h2 class="text-lg mb-2 text-secondary">
         {about.frontmatter.designation}
       </h2>
       <div class="flex items-center justify-center mt-1">
-        <Icon name="carbon:location" class="w-4 h-4 mr-1" />
-        <p class="text-sm text-secondary">{about.frontmatter.location}</p>
+        <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
+        <p class="text-sm text-secondary" aria-label={`Location: ${about.frontmatter.location}`}>{about.frontmatter.location}</p>
       </div>
     </div>
   </article>

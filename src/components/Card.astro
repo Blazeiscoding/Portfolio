@@ -1,18 +1,46 @@
 ---
 import { Icon } from "astro-icon/components";
-const { timeframe, title, description, url, tags, url_name, location } =
+const { timeframe, title, description, url, tags, url_name, location, image, github } =
   Astro.props;
 ---
 
-<div class="card card-compact card-bordered border border-[oklch(var(--s))] w-full md:w-112 lg:w-128 hover:shadow-lg transition-all my-4">
+<div class="card card-compact card-bordered border border-[oklch(var(--s))] w-full md:w-112 lg:w-128 hover:shadow-xl hover:border-primary/50 transition-all duration-300 my-4 group">
+  {image && (
+    <figure class="w-full overflow-hidden cursor-pointer relative">
+      <a 
+        href={url || "#"} 
+        target={url ? "_blank" : undefined}
+        rel={url ? "noopener noreferrer" : undefined}
+        aria-label={`View ${title} project`}
+        class="block"
+      >
+        <img
+          src={image}
+          alt={`${title} project screenshot`}
+          class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+          loading="lazy"
+          width="512"
+          height="192"
+          decoding="async"
+        />
+        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+          <Icon 
+            name="carbon:view" 
+            class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+            aria-hidden="true"
+          />
+        </div>
+      </a>
+    </figure>
+  )}
   <div class="card-body">
     <div class="grid grid-cols-3 gap-4 mb-2">
       <div class="self-start col-span-2 justify-self-start text-left">
         <h1 class="uppercase card-title font-extrabold tracking-tighter md:text-2xl">{title}</h1>
         {location && (
           <div class="flex items-center mt-2">
-            <Icon name="carbon:location" class="w-4 h-4 mr-1" />
-            <p class="text-sm  font-light text-secondary">{location}</p>
+            <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
+            <p class="text-sm  font-light text-secondary" aria-label={`Location: ${location}`}>{location}</p>
           </div>
         )}
       </div>
@@ -40,11 +68,31 @@ const { timeframe, title, description, url, tags, url_name, location } =
         )}
       </div>
 
-      <div class="self-center justify-self-end">
-        <a href={url} target="_blank" class="link link-hover text-sm text-right flex justify-center items-center">
-          {url_name}
-          {url !== "#" && <Icon name="carbon:link" class="w-4 h-4 ml-2" />}
-        </a>
+      <div class="self-center justify-self-end flex flex-col gap-2 items-end">
+        {url && url !== "#" && (
+          <a 
+            href={url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="link link-hover text-sm text-right flex justify-center items-center hover:text-primary transition-colors"
+            aria-label={`${url_name} - ${title} (opens in new tab)`}
+          >
+            {url_name}
+            <Icon name="carbon:link" class="w-4 h-4 ml-2" aria-hidden="true" />
+          </a>
+        )}
+        {github && (
+          <a 
+            href={github} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="link link-hover text-sm text-right flex justify-center items-center hover:text-primary transition-colors"
+            aria-label={`View ${title} source code on GitHub (opens in new tab)`}
+          >
+            <Icon name="carbon:logo-github" class="w-4 h-4 mr-1" aria-hidden="true" />
+            Code
+          </a>
+        )}
       </div>
     </div>
   </div>

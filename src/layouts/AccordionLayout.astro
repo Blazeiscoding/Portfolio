@@ -7,12 +7,16 @@ const { title, icon } = Astro.props;
 
 <BaseLayout>
   <Analytics />
-  <div class="collapse collapse-arrow ease-in-out duration-700">
-    <input aria-label={title} type="checkbox"/>
+  <div class="collapse collapse-arrow ease-in-out duration-700 animate-on-scroll">
+    <input 
+      aria-label={`Toggle ${title} section`} 
+      type="checkbox"
+      aria-expanded="false"
+    />
     <div class="collapse-title font-extrabold tracking-tight md:text-2xl">
       <div class="flex">
-        <Icon name={icon} class="w-8 h-8 mr-4" />
-        {title}
+        <Icon name={icon} class="w-8 h-8 mr-4" aria-hidden="true" />
+        <h2>{title}</h2>
       </div>
     </div>
     <div class="collapse-content">

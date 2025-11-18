@@ -4,63 +4,195 @@ import Container from "../components/Container.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { Icon } from "astro-icon/components";
+import * as about from "../pages/about/about.md";
+
+const siteUrl = "https://nikhilrathore.com"; // Update with your actual URL
+const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
+const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. Full-Stack Developer skilled in building scalable web applications using React, Next.js, Node.js, and modern UI frameworks. Experienced in developing RESTful APIs, managing databases with PostgreSQL and MongoDB, and deploying production-ready apps.`;
+const imageUrl = `${siteUrl}/profile.webp`;
 ---
 
-<html lang="gl">
+<html lang="en">
   <head>
     <script is:inline>
-      if (localStorage.getItem("theme") === null) {
-        document.documentElement.setAttribute("data-theme", "lofi");
-      } else
-        document.documentElement.setAttribute(
-          "data-theme",
-          localStorage.getItem("theme")
-        );
+      // Set theme before page render to prevent flash
+      (function() {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = savedTheme || (prefersDark ? "black" : "lofi");
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.transition = "background-color 0.3s ease, color 0.3s ease";
+        
+        // Set checkbox state
+        const isDark = theme === "black";
+        const checkbox = document.getElementById("theme-toggle");
+        if (checkbox) {
+          checkbox.checked = isDark;
+          checkbox.setAttribute("aria-checked", isDark.toString());
+        }
+      })();
     </script>
     <script>
       import { themeChange } from "theme-change";
       themeChange();
+      
+      // Smooth theme transitions
+      document.addEventListener("DOMContentLoaded", () => {
+        const themeToggle = document.querySelector('[data-toggle-theme]') as HTMLInputElement;
+        if (themeToggle) {
+          // Set initial state
+          const currentTheme = document.documentElement.getAttribute("data-theme");
+          themeToggle.checked = currentTheme === "black";
+          themeToggle.setAttribute("aria-checked", (currentTheme === "black").toString());
+          
+          themeToggle.addEventListener('change', (e) => {
+            const target = e.target as HTMLInputElement;
+            const isDark = target.checked;
+            const newTheme = isDark ? "black" : "lofi";
+            localStorage.setItem("theme", newTheme);
+            document.documentElement.setAttribute("data-theme", newTheme);
+            target.setAttribute("aria-checked", isDark.toString());
+          });
+        }
+      });
     </script>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/favicon.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>Nikhil Rathore CV</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>{siteName}</title>
+    <meta name="title" content={siteName} />
+    <meta name="description" content={description} />
+    <meta name="author" content={about.frontmatter.name} />
+    <meta name="keywords" content="Full Stack Developer, React, Next.js, Node.js, TypeScript, Web Developer, Portfolio" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:title" content={siteName} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={siteUrl} />
+    <meta name="twitter:title" content={siteName} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    
+    <!-- Additional SEO -->
+    <link rel="canonical" href={siteUrl} />
+    <meta name="theme-color" content="#ffffff" />
   </head>
   <body class="flex flex-col min-h-screen">
     <Header />
     <div
       class="flex items-center absolute top-4 right-4 md:top-6 md:right-6 lg:top-8 lg:right-8 xl:top-10 xl:right-10 z-10"
+      role="region"
+      aria-label="Theme switcher"
     >
-      <Icon name="carbon:moon" class="w-4 h-4" />
+      <Icon name="carbon:moon" class="w-4 h-4" aria-hidden="true" />
       <input
         type="checkbox"
         data-toggle-theme="black,lofi"
         data-act-class="ACTIVECLASS"
-        class="toggle toggle-sm mx-1 bg-secondary"
-        checked
+        class="toggle toggle-sm mx-1 bg-secondary transition-all duration-300"
+        aria-label="Toggle dark mode"
+        role="switch"
+        id="theme-toggle"
       />
-      <Icon name="carbon:light" class="w-4 h-4" />
+      <Icon name="carbon:light" class="w-4 h-4" aria-hidden="true" />
     </div>
 
     <div
       class="divider mx-auto h-fit max-w-3xl w-[95vw] flex flex-nowrap bg-secondary"
+      role="separator"
+      aria-hidden="true"
     >
     </div>
     <main
-      class="mx-auto flex-grow max-h-[90vh] md:max-h-[70vh] max-w-3xl overflow-y-scroll py-2 grid w-[95vw]"
+      class="mx-auto flex-grow max-h-[90vh] md:max-h-[70vh] max-w-3xl overflow-y-scroll py-2 grid w-[95vw] fade-in-up"
+      role="main"
+      aria-label="Portfolio content"
     >
       <div class="container">
         <Container />
       </div>
     </main>
+    
+    <script>
+      // Intersection Observer for scroll animations
+      document.addEventListener("DOMContentLoaded", () => {
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: "0px 0px -50px 0px"
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        }, observerOptions);
+        
+        // Observe all accordion sections
+        document.querySelectorAll(".collapse").forEach(section => {
+          section.classList.add("animate-on-scroll");
+          observer.observe(section);
+        });
+      });
+    </script>
     <Footer class="flex justify-center items-center py-4" />
   </body>
 </html>
 
 <style is:global>
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     font-family: "DM Sans Variable", sans-serif;
+  }
+  
+  /* Smooth fade-in animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
+  /* Intersection Observer will add this class */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+  
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (min-width: 768px) {
