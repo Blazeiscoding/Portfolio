@@ -8,29 +8,29 @@ import * as about from "../pages/about/about.md";
     class="flex flex-col md:flex-col items-center gap-4 w-full max-w-2xl"
   >
     <div
-      class="flex-shrink-0 w-20 md:w-24 rounded-full shadow-sm overflow-hidden"
+      class="flex-shrink-0 w-24 md:w-28 rounded-full shadow-lg ring-4 ring-primary/20 hover:ring-primary/40 transition-all duration-500 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 p-1"
     >
       <img
         alt={`${about.frontmatter.name} profile picture`}
         src="/profile.webp"
-        class="grayscale-[50] hover:grayscale-0 transition-all duration-500 rounded-full"
-        width="96"
-        height="96"
+        class="grayscale-[30] hover:grayscale-0 transition-all duration-500 rounded-full w-full h-full object-cover"
+        width="112"
+        height="112"
         loading="eager"
         decoding="async"
       />
     </div>
 
     <div class="text-center">
-      <div class="flex flex-wrap justify-center items-center gap-3 mb-2">
-        <h1 class="text-3xl font-extrabold tracking-tight md:text-3xl">
+      <div class="flex flex-wrap justify-center items-center gap-3 mb-3">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
           {about.frontmatter.name}
         </h1>
-        <div class="badge w-max text-sm font-light badge-outline shadow-lg">
+        <div class="badge badge-sm badge-primary/20 text-primary border-primary/30 text-xs font-medium px-3 py-1">
           {about.frontmatter.pronouns}
         </div>
       </div>
-      <h2 class="text-lg mb-2 text-secondary">
+      <h2 class="text-lg md:text-xl mb-3 text-base-content font-semibold">
         {about.frontmatter.designation}
       </h2>
       <div class="flex items-center justify-center mt-1">

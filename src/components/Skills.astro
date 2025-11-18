@@ -42,19 +42,22 @@ const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as c
     
     return (
       <div class="skill-category mb-6">
-        <h3 class="text-lg font-semibold mb-3 text-primary">{category}</h3>
-        <div class="flex flex-wrap gap-3">
+        <h3 class="text-lg font-bold mb-4 text-base-content flex items-center gap-2">
+          <span class="w-1 h-6 bg-primary rounded-full"></span>
+          {category}
+        </h3>
+        <div class="flex flex-wrap gap-2.5">
           {categorySkills.map((skill) => (
             <div
-              class="skill-badge group flex items-center gap-2 px-4 py-2 rounded-lg border border-[oklch(var(--s))] hover:border-primary hover:shadow-md transition-all duration-300 cursor-default"
+              class="skill-badge group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-base-300 hover:border-primary hover:shadow-lg hover:bg-primary/5 transition-all duration-300 cursor-default"
               data-skill={skill.name}
             >
               <Icon 
                 name={skill.icon} 
-                class="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300" 
+                class="w-5 h-5 text-primary group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" 
                 aria-hidden="true"
               />
-              <span class="text-sm font-medium">{skill.name}</span>
+              <span class="text-sm font-medium text-base-content">{skill.name}</span>
             </div>
           ))}
         </div>
@@ -69,7 +72,7 @@ const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as c
   }
   
   .skill-badge:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.02);
   }
 </style>
 
