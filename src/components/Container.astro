@@ -40,6 +40,27 @@ const sortedStudies = sortByDate(studies);
     </AccordionLayout>
   </section>
 
+  <section id="projects" class="scroll-mt-32">
+    <AccordionLayout title={"Projects"} icon={"carbon:tools"}>
+      {
+        sortedProjects.map((item) => {
+          return (
+            <Card
+              title={item.frontmatter.title}
+              timeframe={item.frontmatter.date}
+              description={item.compiledContent()}
+              tags={item.frontmatter.tags}
+              url={item.frontmatter.url}
+              url_name={"View project"}
+              image={item.frontmatter.image}
+              github={item.frontmatter.github}
+            />
+          );
+        })
+      }
+    </AccordionLayout>
+  </section>
+
   <section id="work" class="scroll-mt-32">
     <AccordionLayout title={"Work"} icon={"carbon:construction"}>
       {
@@ -72,27 +93,6 @@ const sortedStudies = sortByDate(studies);
               tags={item.frontmatter.tags}
               url={item.url}
               url_name={item.frontmatter.institute}
-            />
-          );
-        })
-      }
-    </AccordionLayout>
-  </section>
-
-  <section id="projects" class="scroll-mt-32">
-    <AccordionLayout title={"Projects"} icon={"carbon:tools"}>
-      {
-        sortedProjects.map((item) => {
-          return (
-            <Card
-              title={item.frontmatter.title}
-              timeframe={item.frontmatter.date}
-              description={item.compiledContent()}
-              tags={item.frontmatter.tags}
-              url={item.frontmatter.url}
-              url_name={"View project"}
-              image={item.frontmatter.image}
-              github={item.frontmatter.github}
             />
           );
         })
