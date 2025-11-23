@@ -163,6 +163,13 @@ const sameAsLinks = [
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add("visible");
+              
+              // Trigger staggered animations for children
+              const staggerItems = entry.target.querySelectorAll(".stagger-item");
+              staggerItems.forEach((item, index) => {
+                (item as HTMLElement).style.transitionDelay = `${index * 100}ms`;
+                item.classList.add("visible");
+              });
             }
           });
         }, observerOptions);
@@ -240,6 +247,18 @@ const sameAsLinks = [
   }
   
   .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Staggered Animation Items */
+  .stagger-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  }
+  
+  .stagger-item.visible {
     opacity: 1;
     transform: translateY(0);
   }

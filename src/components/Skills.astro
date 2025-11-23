@@ -49,7 +49,7 @@ const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as c
         <div class="flex flex-wrap gap-2.5">
           {categorySkills.map((skill) => (
             <div
-              class="skill-badge group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-base-300 hover:border-primary hover:shadow-lg hover:bg-primary/5 transition-all duration-300 cursor-default"
+              class="skill-badge group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-base-200/50 bg-base-100/50 backdrop-blur-sm hover:border-primary hover:shadow-lg hover:bg-primary/10 transition-all duration-300 cursor-default stagger-item"
               data-skill={skill.name}
             >
               <Icon 
@@ -68,7 +68,7 @@ const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as c
 
 <style>
   .skill-badge {
-    background: oklch(var(--b2));
+    /* Glassmorphism handled by utility classes */
   }
   
   .skill-badge:hover {
