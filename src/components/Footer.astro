@@ -1,26 +1,50 @@
 ---
+import { Icon } from "astro-icon/components";
 const getYear = () => new Date().getFullYear().toString();
 ---
 
-<footer
-  class="flex justify-center items-center bg-transparent py-4"
->
-  <p class="flex items-center text-center font-light text-sm text-secondary">
-    &copy; {getYear()} developed by
+<footer class="flex flex-col justify-center items-center bg-transparent py-8 gap-4">
+  <div class="flex gap-4">
     <a 
+      href="https://github.com/Blazeiscoding" 
       target="_blank" 
       rel="noopener noreferrer"
-      class="link ml-1" 
-      href="https://github.com/Blazeiscoding"
-      aria-label="Nikhil Rathore GitHub profile (opens in new tab)"
-    >Nikhil Rathore</a>
-  </p>
-  <img
-    class="rounded-full w-4 h-4 ml-2 shadow-md border border-black"
-    src="in.png"
-    alt="Indian Flag"
-    width="16"
-    height="16"
-    loading="lazy"
-  />
+      class="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 hover:text-primary transition-colors"
+      aria-label="GitHub"
+    >
+      <Icon name="carbon:logo-github" class="w-5 h-5" />
+    </a>
+    <a 
+      href="https://linkedin.com/in/nikhil-rathore" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      class="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 hover:text-primary transition-colors"
+      aria-label="LinkedIn"
+    >
+      <Icon name="carbon:logo-linkedin" class="w-5 h-5" />
+    </a>
+    <a 
+      href="mailto:contact@nikhilrathore.com" 
+      class="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 hover:text-primary transition-colors"
+      aria-label="Email"
+    >
+      <Icon name="carbon:email" class="w-5 h-5" />
+    </a>
+  </div>
+  
+  <div class="flex items-center gap-2 text-sm text-base-content/60 font-light">
+    <p>&copy; {getYear()} Nikhil Rathore</p>
+    <span class="w-1 h-1 rounded-full bg-base-content/30"></span>
+    <div class="flex items-center gap-1">
+      <span>Made in</span>
+      <img
+        class="rounded-sm w-4 h-3 shadow-sm"
+        src="/in.png"
+        alt="India"
+        width="16"
+        height="12"
+        loading="lazy"
+      />
+    </div>
+  </div>
 </footer>

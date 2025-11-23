@@ -132,7 +132,8 @@ const sameAsLinks = [
       "description": description
     })} />
   </head>
-  <body class="flex flex-col min-h-screen">
+  <body class="flex flex-col min-h-screen relative">
+    <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-primary z-[10000] transition-all duration-100 ease-out" style="width: 0%"></div>
     <Header />
 
     <div
@@ -152,6 +153,17 @@ const sameAsLinks = [
     </main>
     
     <script>
+      // Scroll Progress Bar
+      window.addEventListener("scroll", () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        const progressBar = document.getElementById("scroll-progress");
+        if (progressBar) {
+          progressBar.style.width = scrolled + "%";
+        }
+      });
+
       // Intersection Observer for scroll animations
       document.addEventListener("DOMContentLoaded", () => {
         const observerOptions = {
@@ -194,6 +206,9 @@ const sameAsLinks = [
   body {
     font-family: "DM Sans Variable", sans-serif;
     min-height: 100vh;
+    background-image: radial-gradient(circle, oklch(var(--p) / 0.1) 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-attachment: fixed;
   }
   
   /* View Transition API - ultra-smooth for Chromium */
