@@ -49,15 +49,16 @@ const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as c
         <div class="flex flex-wrap gap-2.5">
           {categorySkills.map((skill) => (
             <div
-              class="skill-badge group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-base-200/50 bg-base-100/50 backdrop-blur-sm hover:border-primary hover:shadow-lg hover:bg-primary/10 transition-all duration-300 cursor-default stagger-item"
+              class="skill-badge group flex items-center gap-2 px-4 py-2.5 rounded-lg border border-white/10 dark:border-white/5 bg-base-100/40 backdrop-blur-sm hover:border-primary/50 hover:shadow-[0_0_15px_rgba(var(--p),0.3)] transition-all duration-300 cursor-default stagger-item relative overflow-hidden"
               data-skill={skill.name}
             >
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] shine-effect pointer-events-none"></div>
               <Icon 
                 name={skill.icon} 
-                class="w-5 h-5 text-primary group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" 
+                class="w-5 h-5 text-primary group-hover:scale-125 group-hover:rotate-6 transition-all duration-300 relative z-10" 
                 aria-hidden="true"
               />
-              <span class="text-sm font-medium text-base-content">{skill.name}</span>
+              <span class="text-sm font-medium text-base-content relative z-10">{skill.name}</span>
             </div>
           ))}
         </div>
@@ -67,12 +68,18 @@ const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as c
 </div>
 
 <style>
-  .skill-badge {
-    /* Glassmorphism handled by utility classes */
-  }
-  
   .skill-badge:hover {
     transform: translateY(-3px) scale(1.02);
+  }
+
+  @keyframes shine {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .group:hover .shine-effect {
+    animation: shine 1s;
   }
 </style>
 

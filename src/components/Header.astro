@@ -10,7 +10,9 @@ const heroHighlights = [
 ---
 
 <header class="mx-auto pt-6 pb-4 relative fade-in-up w-[95vw] max-w-3xl px-4">
-  <div class="rounded-3xl border border-base-300/60 bg-base-100/80 backdrop-blur supports-[backdrop-filter]:backdrop-blur-lg p-6 shadow-lg space-y-6">
+  <div class="rounded-3xl border border-white/10 dark:border-white/5 bg-base-100/50 backdrop-blur-xl shadow-xl space-y-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+    <div class="relative z-10 p-6 space-y-6">
     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
       <article class="flex flex-col sm:flex-row items-center gap-4 w-full">
         <div
@@ -35,8 +37,9 @@ const heroHighlights = [
               {about.frontmatter.pronouns}
             </div>
           </div>
-          <h2 class="text-lg md:text-xl mb-2 text-base-content font-semibold">
-            {about.frontmatter.designation}
+          <h2 class="text-lg md:text-xl mb-2 text-base-content font-semibold flex items-center gap-2">
+            <span class="typewriter">{about.frontmatter.designation}</span>
+            <span class="cursor-blink">|</span>
           </h2>
           <div class="flex items-center justify-center sm:justify-start mt-1 text-secondary">
             <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
@@ -86,10 +89,32 @@ const heroHighlights = [
         </a>
       </div>
     </section>
+    </div>
   </div>
 </header>
 
 <style>
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0;
+    animation: typing 3.5s steps(40, end);
+  }
+
+  .cursor-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+
+  @keyframes blink {
+    from, to { opacity: 1 }
+    50% { opacity: 0 }
+  }
+
   .theme-toggle-input {
     -webkit-tap-highlight-color: transparent;
     /* Let Chromium handle transitions naturally */

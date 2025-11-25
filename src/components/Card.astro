@@ -5,103 +5,146 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
   Astro.props;
 ---
 
-<div class="card card-compact card-bordered border border-base-200/50 w-full md:w-112 lg:w-128 hover:shadow-2xl hover:border-primary/50 transition-all duration-300 my-4 group overflow-hidden rounded-xl bg-base-100/60 backdrop-blur-md stagger-item">
-  {image && (
-    <figure class="w-full overflow-hidden cursor-pointer relative">
-      <a 
-        href={url || "#"} 
-        target={url ? "_blank" : undefined}
-        rel={url ? "noopener noreferrer" : undefined}
-        aria-label={`View ${title} project`}
-        class="block"
-      >
-        <img
-          src={image}
-          alt={`${title} project screenshot`}
-          class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-          loading="lazy"
-          width="512"
-          height="208"
-          decoding="async"
-        />
-        <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
-          <Icon 
-            name="carbon:view" 
-            class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
-            aria-hidden="true"
+<div class="card-wrapper perspective-1000 w-full md:w-112 lg:w-128 my-4">
+  <div class="card card-compact card-bordered border border-white/10 dark:border-white/5 w-full hover:shadow-2xl transition-all duration-500 group overflow-hidden rounded-xl bg-base-100/40 backdrop-blur-md stagger-item transform-style-3d hover:rotate-x-2 hover:rotate-y-2">
+    {image && (
+      <figure class="w-full overflow-hidden cursor-pointer relative">
+        <a 
+          href={url || "#"} 
+          target={url ? "_blank" : undefined}
+          rel={url ? "noopener noreferrer" : undefined}
+          aria-label={`View ${title} project`}
+          class="block"
+        >
+          <img
+            src={image}
+            alt={`${title} project screenshot`}
+            class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+            loading="lazy"
+            width="512"
+            height="208"
+            decoding="async"
           />
+          <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+            <Icon 
+              name="carbon:view" 
+              class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" 
+              aria-hidden="true"
+            />
+          </div>
+        </a>
+      </figure>
+    )}
+    <div class="card-body">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+        <div class="self-start md:col-span-2 justify-self-start text-left">
+          <h2 class="card-title font-bold text-xl md:text-2xl mb-1 text-base-content">{title}</h2>
+          {location && (
+            <div class="flex items-center mt-2">
+              <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
+              <p class="text-sm  font-light text-secondary" aria-label={`Location: ${location}`}>{location}</p>
+            </div>
+          )}
         </div>
-      </a>
-    </figure>
-  )}
-  <div class="card-body">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-      <div class="self-start md:col-span-2 justify-self-start text-left">
-        <h2 class="card-title font-bold text-xl md:text-2xl mb-1 text-base-content">{title}</h2>
-        {location && (
-          <div class="flex items-center mt-2">
-            <Icon name="carbon:location" class="w-4 h-4 mr-1" aria-hidden="true" />
-            <p class="text-sm  font-light text-secondary" aria-label={`Location: ${location}`}>{location}</p>
-          </div>
-        )}
+
+        <div class="self-center md:justify-self-end">
+          {timeframe && (
+            <div class="badge badge-sm badge-primary font-mono text-xs px-3 py-2 shadow-sm">
+              {timeframe}
+            </div>
+          )}
+        </div>
       </div>
 
-      <div class="self-center md:justify-self-end">
-        {timeframe && (
-          <div class="badge badge-sm badge-primary font-mono text-xs px-3 py-2 shadow-sm">
-            {timeframe}
-          </div>
-        )}
-      </div>
-    </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 place-items-stretch">
+        <div class="self-start md:col-span-2 justify-self-start text-left">
+          <article class="prose prose-sm max-w-none text-base-content/70 leading-relaxed my-2">
+            <Fragment set:html={description}></Fragment>
+          </article>
+          {Array.isArray(tags) && (
+            <div class="flex flex-wrap gap-2 my-3">
+              {tags.map((item) => (
+                <span class="badge badge-sm badge-outline text-base-content text-xs font-medium px-3 py-1.5 hover:badge-primary hover:!text-primary-content hover:border-primary transition-all duration-200" :key={item}>{item}</span>
+              ))}
+            </div>
+          )}
+          {url && url !== "#" && (
+            <ShareButtons 
+              title={title} 
+              url={url} 
+              description={description ? String(description).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 200) : ''} 
+            />
+          )}
+        </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 place-items-stretch">
-      <div class="self-start md:col-span-2 justify-self-start text-left">
-        <article class="prose prose-sm max-w-none text-base-content/70 leading-relaxed my-2">
-          <Fragment set:html={description}></Fragment>
-        </article>
-        {Array.isArray(tags) && (
-          <div class="flex flex-wrap gap-2 my-3">
-            {tags.map((item) => (
-              <span class="badge badge-sm badge-outline text-base-content text-xs font-medium px-3 py-1.5 hover:badge-primary hover:!text-primary-content hover:border-primary transition-all duration-200" :key={item}>{item}</span>
-            ))}
-          </div>
-        )}
-        {url && url !== "#" && (
-          <ShareButtons 
-            title={title} 
-            url={url} 
-            description={description ? String(description).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().substring(0, 200) : ''} 
-          />
-        )}
-      </div>
-
-      <div class="self-stretch md:justify-self-end flex flex-col gap-2 items-stretch md:items-end">
-        {url && url !== "#" && (
-          <a 
-            href={url} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="btn btn-sm btn-outline btn-primary gap-2 hover:scale-105 transition-transform"
-            aria-label={`${url_name} - ${title} (opens in new tab)`}
-          >
-            {url_name}
-            <Icon name="carbon:launch" class="w-4 h-4" aria-hidden="true" />
-          </a>
-        )}
-        {github && (
-          <a 
-            href={github} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="btn btn-sm btn-ghost gap-2 hover:scale-105 transition-transform"
-            aria-label={`View ${title} source code on GitHub (opens in new tab)`}
-          >
-            <Icon name="carbon:logo-github" class="w-4 h-4" aria-hidden="true" />
-            <span class="hidden sm:inline">Code</span>
-          </a>
-        )}
+        <div class="self-stretch md:justify-self-end flex flex-col gap-2 items-stretch md:items-end">
+          {url && url !== "#" && (
+            <a 
+              href={url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="btn btn-sm btn-outline btn-primary gap-2 hover:scale-105 transition-transform"
+              aria-label={`${url_name} - ${title} (opens in new tab)`}
+            >
+              {url_name}
+              <Icon name="carbon:launch" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          )}
+          {github && (
+            <a 
+              href={github} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="btn btn-sm btn-ghost gap-2 hover:scale-105 transition-transform"
+              aria-label={`View ${title} source code on GitHub (opens in new tab)`}
+            >
+              <Icon name="carbon:logo-github" class="w-4 h-4" aria-hidden="true" />
+              <span class="hidden sm:inline">Code</span>
+            </a>
+          )}
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 
+      0 20px 40px -5px rgba(0, 0, 0, 0.1),
+      0 10px 20px -5px rgba(0, 0, 0, 0.05),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  /* Add a subtle shine effect */
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      115deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transition: 0.5s;
+    pointer-events: none;
+  }
+
+  .card:hover::before {
+    left: 100%;
+    transition: 0.7s;
+  }
+</style>
