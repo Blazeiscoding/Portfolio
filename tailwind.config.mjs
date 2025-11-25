@@ -25,6 +25,7 @@ export default {
 		extend: {
 			fontFamily: {
 				'sans': ["DM Sans", "Inter", ...defaultTheme.fontFamily.sans],
+				'heading': ["Outfit", "DM Sans", ...defaultTheme.fontFamily.sans],
 			},
 		},
 	},

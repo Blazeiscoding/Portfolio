@@ -38,7 +38,7 @@ const heroHighlights = [
             </div>
           </div>
           <h2 class="text-lg md:text-xl mb-2 text-base-content font-semibold flex items-center gap-2">
-            <span class="typewriter">{about.frontmatter.designation}</span>
+            <span class="typewriter" id="typewriter-text">{about.frontmatter.designation}</span>
             <span class="cursor-blink">|</span>
           </h2>
           <div class="flex items-center justify-center sm:justify-start mt-1 text-secondary">
@@ -91,14 +91,41 @@ const heroHighlights = [
     </section>
     </div>
   </div>
+    </div>
+  </div>
 </header>
+
+<script>
+  const typewriter = document.getElementById('typewriter-text');
+  if (typewriter) {
+    const text = typewriter.textContent || '';
+    const length = text.length;
+    
+    // Temporarily reset to measure width
+    typewriter.style.width = 'auto';
+    typewriter.style.animation = 'none';
+    const width = typewriter.offsetWidth;
+    
+    // Set CSS variables
+    typewriter.style.setProperty('--typewriter-width', `${width}px`);
+    typewriter.style.setProperty('--typewriter-steps', length.toString());
+    
+    // Re-enable animation
+    // Force reflow
+    void typewriter.offsetWidth;
+    typewriter.style.width = '0';
+    typewriter.style.animation = `typing 3.5s steps(${length}, end) forwards`;
+  }
+</script>
 
 <style>
   .typewriter {
+    display: inline-block;
     overflow: hidden;
     white-space: nowrap;
     margin: 0;
-    animation: typing 3.5s steps(40, end);
+    width: 0;
+    /* Animation is set via JS */
   }
 
   .cursor-blink {
@@ -107,7 +134,7 @@ const heroHighlights = [
 
   @keyframes typing {
     from { width: 0 }
-    to { width: 100% }
+    to { width: var(--typewriter-width) }
   }
 
   @keyframes blink {

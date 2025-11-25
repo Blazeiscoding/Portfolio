@@ -3,7 +3,9 @@ import { Icon } from "astro-icon/components";
 const getYear = () => new Date().getFullYear().toString();
 ---
 
-<footer class="flex flex-col justify-center items-center bg-transparent py-8 gap-4">
+<footer class="flex flex-col justify-center items-center bg-transparent py-8 gap-4 relative">
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-base-content/10 to-transparent"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent blur-sm"></div>
   <div class="flex gap-4">
     <a 
       href="https://github.com/Blazeiscoding" 
