@@ -13,7 +13,8 @@ const description = `${about.frontmatter.name} - ${about.frontmatter.designation
 const imageUrl = `${siteUrl}/profile.webp`;
 
 // Get contact links for structured data
-const contactLinks = await Astro.glob("../pages/contact/*.md");
+const contactLinksGlob = import.meta.glob("../pages/contact/*.md", { eager: true });
+const contactLinks = Object.values(contactLinksGlob) as any[];
 const sameAsLinks = [
   "https://github.com/Blazeiscoding",
   ...contactLinks.map(item => item.frontmatter.url).filter(Boolean)

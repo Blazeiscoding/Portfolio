@@ -4,10 +4,15 @@ import AccordionLayout from "../layouts/AccordionLayout.astro";
 import Card from "./Card.astro";
 import ContactCard from "./ContactCard.astro";
 import Skills from "./Skills.astro";
-const works = await Astro.glob("../pages/works/*.md");
-const projects = await Astro.glob("../pages/projects/*.md");
-const studies = await Astro.glob("../pages/studies/*.md");
-const contact = await Astro.glob("../pages/contact/*.md");
+const worksGlob = import.meta.glob("../pages/works/*.md", { eager: true });
+const projectsGlob = import.meta.glob("../pages/projects/*.md", { eager: true });
+const studiesGlob = import.meta.glob("../pages/studies/*.md", { eager: true });
+const contactGlob = import.meta.glob("../pages/contact/*.md", { eager: true });
+
+const works = Object.values(worksGlob) as any[];
+const projects = Object.values(projectsGlob) as any[];
+const studies = Object.values(studiesGlob) as any[];
+const contact = Object.values(contactGlob) as any[];
 const PDF = "/MyResume.pdf";
 
 // Sort by date (newest first) - extract year from date string
