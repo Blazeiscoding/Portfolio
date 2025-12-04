@@ -1,0 +1,95 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  username: string;
+}
+
+const { username } = Astro.props;
+---
+
+<div class="github-activity w-full">
+  <div class="flex items-center gap-2 mb-4">
+    <Icon name="carbon:logo-github" class="w-5 h-5 text-primary" aria-hidden="true" />
+    <h3 class="text-lg font-bold text-base-content">GitHub Activity</h3>
+    <a 
+      href={`https://github.com/${username}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="ml-auto text-sm text-primary hover:underline"
+    >
+      @{username}
+    </a>
+  </div>
+  
+  <div class="contribution-wrapper rounded-xl border border-white/10 dark:border-white/5 bg-base-100/40 backdrop-blur-md p-4 overflow-hidden">
+    <img 
+      src={`https://ghchart.rshah.org/6366f1/${username}`}
+      alt={`${username}'s GitHub contribution graph`}
+      class="w-full h-auto contribution-graph dark:invert dark:hue-rotate-180"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4" id="github-stats">
+    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
+      <div class="text-2xl font-bold text-primary" id="repos-count">--</div>
+      <div class="text-xs text-base-content/60">Repositories</div>
+    </div>
+    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
+      <div class="text-2xl font-bold text-primary" id="followers-count">--</div>
+      <div class="text-xs text-base-content/60">Followers</div>
+    </div>
+    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
+      <div class="text-2xl font-bold text-primary" id="following-count">--</div>
+      <div class="text-xs text-base-content/60">Following</div>
+    </div>
+    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
+      <div class="text-2xl font-bold text-primary" id="stars-count">--</div>
+      <div class="text-xs text-base-content/60">Total Stars</div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ username }}>
+  async function fetchGitHubStats() {
+    try {
+      const res = await fetch(`/api/github-stats?username=${username}`);
+      const data = await res.json();
+      
+      document.getElementById('repos-count').textContent = data.repos || 0;
+      document.getElementById('followers-count').textContent = data.followers || 0;
+      document.getElementById('following-count').textContent = data.following || 0;
+      document.getElementById('stars-count').textContent = data.stars || 0;
+      
+      if (data.hasToken && data.privateRepos > 0) {
+        const reposLabel = document.querySelector('#repos-count + div');
+        if (reposLabel) {
+          reposLabel.innerHTML = `Repos <span class="text-primary text-[10px]">(+${data.privateRepos} private)</span>`;
+        }
+      }
+    } catch (e) {}
+  }
+  
+  fetchGitHubStats();
+  document.addEventListener('DOMContentLoaded', fetchGitHubStats);
+</script>
+
+<style>
+  .contribution-graph {
+    filter: grayscale(0);
+  }
+  
+  [data-theme="black"] .contribution-graph {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  
+  .stat-card {
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-2px);
+  }
+</style>

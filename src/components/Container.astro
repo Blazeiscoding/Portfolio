@@ -4,6 +4,7 @@ import AccordionLayout from "../layouts/AccordionLayout.astro";
 import Card from "./Card.astro";
 import ContactCard from "./ContactCard.astro";
 import Skills from "./Skills.astro";
+import GitHubActivity from "./GitHubActivity.astro";
 const worksGlob = import.meta.glob("../pages/works/*.md", { eager: true });
 const projectsGlob = import.meta.glob("../pages/projects/*.md", { eager: true });
 const studiesGlob = import.meta.glob("../pages/studies/*.md", { eager: true });
@@ -102,6 +103,12 @@ const sortedStudies = sortByDate(studies);
           );
         })
       }
+    </AccordionLayout>
+  </section>
+
+  <section id="github" class="scroll-mt-32">
+    <AccordionLayout title={"GitHub"} icon={"carbon:logo-github"}>
+      <GitHubActivity username="Blazeiscoding" />
     </AccordionLayout>
   </section>
 
