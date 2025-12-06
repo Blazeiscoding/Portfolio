@@ -53,23 +53,99 @@ const { username } = Astro.props;
 </div>
 
 <script define:vars={{ username }}>
+  // Animated counter with easing
+  function animateCounter(element, target, duration = 1500) {
+    const start = 0;
+    const startTime = performance.now();
+    
+    // Easing function (ease-out cubic)
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+    
+    function update(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutCubic(progress);
+      const current = Math.floor(start + (target - start) * easedProgress);
+      
+      element.textContent = current;
+      
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        element.textContent = target;
+      }
+    }
+    
+    requestAnimationFrame(update);
+  }
+  
+  // Store fetched data for animation
+  let statsData = null;
+  let hasAnimated = false;
+  
   async function fetchGitHubStats() {
     try {
       const res = await fetch(`/api/github-stats?username=${username}`);
-      const data = await res.json();
+      statsData = await res.json();
       
-      document.getElementById('repos-count').textContent = data.repos || 0;
-      document.getElementById('followers-count').textContent = data.followers || 0;
-      document.getElementById('following-count').textContent = data.following || 0;
-      document.getElementById('stars-count').textContent = data.stars || 0;
+      // Set initial values to 0 (will animate when scrolled into view)
+      document.getElementById('repos-count').textContent = '0';
+      document.getElementById('followers-count').textContent = '0';
+      document.getElementById('following-count').textContent = '0';
+      document.getElementById('stars-count').textContent = '0';
       
-      if (data.hasToken && data.privateRepos > 0) {
+      if (statsData.hasToken && statsData.privateRepos > 0) {
         const reposLabel = document.querySelector('#repos-count + div');
         if (reposLabel) {
-          reposLabel.innerHTML = `Repos <span class="text-primary text-[10px]">(+${data.privateRepos} private)</span>`;
+          reposLabel.innerHTML = `Repos <span class="text-primary text-[10px]">(+${statsData.privateRepos} private)</span>`;
         }
       }
+      
+      // Check if already in view
+      checkAndAnimate();
     } catch (e) {}
+  }
+  
+  function animateStats() {
+    if (!statsData || hasAnimated) return;
+    hasAnimated = true;
+    
+    const reposEl = document.getElementById('repos-count');
+    const followersEl = document.getElementById('followers-count');
+    const followingEl = document.getElementById('following-count');
+    const starsEl = document.getElementById('stars-count');
+    
+    // Stagger animations for visual effect
+    if (reposEl) animateCounter(reposEl, statsData.repos || 0, 1200);
+    setTimeout(() => {
+      if (followersEl) animateCounter(followersEl, statsData.followers || 0, 1200);
+    }, 150);
+    setTimeout(() => {
+      if (followingEl) animateCounter(followingEl, statsData.following || 0, 1200);
+    }, 300);
+    setTimeout(() => {
+      if (starsEl) animateCounter(starsEl, statsData.stars || 0, 1200);
+    }, 450);
+  }
+  
+  function checkAndAnimate() {
+    const statsContainer = document.getElementById('github-stats');
+    if (!statsContainer || !statsData) return;
+    
+    // Setup Intersection Observer for scroll-triggered animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !hasAnimated) {
+          animateStats();
+          observer.disconnect();
+        }
+      });
+    }, {
+      threshold: 0.3, // Trigger when 30% visible
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    observer.observe(statsContainer);
   }
   
   fetchGitHubStats();
