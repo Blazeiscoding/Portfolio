@@ -22,32 +22,32 @@ const { username } = Astro.props;
     </a>
   </div>
   
-  <div class="contribution-wrapper rounded-xl border border-white/10 dark:border-white/5 bg-base-100/40 backdrop-blur-md p-4 overflow-hidden">
+  <div class="contribution-wrapper rounded-xl border border-base-content/20 bg-base-200/80 backdrop-blur-md p-4 overflow-hidden">
     <img 
       src={`https://ghchart.rshah.org/6366f1/${username}`}
       alt={`${username}'s GitHub contribution graph`}
-      class="w-full h-auto contribution-graph dark:invert dark:hue-rotate-180"
+      class="w-full h-auto contribution-graph"
       loading="lazy"
       decoding="async"
     />
   </div>
   
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4" id="github-stats">
-    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
-      <div class="text-2xl font-bold text-primary" id="repos-count">--</div>
-      <div class="text-xs text-base-content/60">Repositories</div>
+    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
+      <div class="text-2xl font-bold stat-number" id="repos-count">--</div>
+      <div class="text-xs text-base-content/70">Repositories</div>
     </div>
-    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
-      <div class="text-2xl font-bold text-primary" id="followers-count">--</div>
-      <div class="text-xs text-base-content/60">Followers</div>
+    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
+      <div class="text-2xl font-bold stat-number" id="followers-count">--</div>
+      <div class="text-xs text-base-content/70">Followers</div>
     </div>
-    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
-      <div class="text-2xl font-bold text-primary" id="following-count">--</div>
-      <div class="text-xs text-base-content/60">Following</div>
+    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
+      <div class="text-2xl font-bold stat-number" id="following-count">--</div>
+      <div class="text-xs text-base-content/70">Following</div>
     </div>
-    <div class="stat-card rounded-lg border border-white/10 bg-base-100/40 backdrop-blur-md p-3 text-center hover:border-primary/30 transition-all">
-      <div class="text-2xl font-bold text-primary" id="stars-count">--</div>
-      <div class="text-xs text-base-content/60">Total Stars</div>
+    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
+      <div class="text-2xl font-bold stat-number" id="stars-count">--</div>
+      <div class="text-xs text-base-content/70">Total Stars</div>
     </div>
   </div>
 </div>
@@ -97,7 +97,7 @@ const { username } = Astro.props;
       if (statsData.hasToken && statsData.privateRepos > 0) {
         const reposLabel = document.querySelector('#repos-count + div');
         if (reposLabel) {
-          reposLabel.innerHTML = `Repos <span class="text-primary text-[10px]">(+${statsData.privateRepos} private)</span>`;
+          reposLabel.innerHTML = `Repos <span class="private-repos-label text-[10px]">(+${statsData.privateRepos} private)</span>`;
         }
       }
       
@@ -152,13 +152,39 @@ const { username } = Astro.props;
   document.addEventListener('DOMContentLoaded', fetchGitHubStats);
 </script>
 
-<style>
+<style is:global>
   .contribution-graph {
     filter: grayscale(0);
   }
   
   [data-theme="black"] .contribution-graph {
     filter: invert(1) hue-rotate(180deg);
+  }
+  
+  .stat-number {
+    color: oklch(var(--p));
+  }
+  
+  [data-theme="black"] .stat-number {
+    color: #ffffff !important;
+  }
+  
+  .private-repos-label {
+    color: oklch(var(--p));
+  }
+  
+  [data-theme="black"] .private-repos-label {
+    color: #ffffff !important;
+  }
+  
+  [data-theme="black"] .stat-card {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  [data-theme="black"] .contribution-wrapper {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
   }
   
   .stat-card {
