@@ -1,6 +1,19 @@
 ---
 import { Icon } from "astro-icon/components";
 import ShareButtons from "./ShareButtons.astro";
+
+interface Props {
+  timeframe?: string;
+  title: string;
+  description?: string;
+  url?: string;
+  tags?: string[];
+  url_name?: string;
+  location?: string;
+  image?: string;
+  github?: string;
+}
+
 const { timeframe, title, description, url, tags, url_name, location, image, github } =
   Astro.props;
 ---

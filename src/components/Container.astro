@@ -1,24 +1,62 @@
 ---
-import { Icon } from "astro-icon/components";
 import AccordionLayout from "../layouts/AccordionLayout.astro";
 import Card from "./Card.astro";
 import ContactCard from "./ContactCard.astro";
 import Skills from "./Skills.astro";
 import GitHubActivity from "./GitHubActivity.astro";
-const worksGlob = import.meta.glob("../pages/works/*.md", { eager: true });
-const projectsGlob = import.meta.glob("../pages/projects/*.md", { eager: true });
-const studiesGlob = import.meta.glob("../pages/studies/*.md", { eager: true });
-const contactGlob = import.meta.glob("../pages/contact/*.md", { eager: true });
 
-const works = Object.values(worksGlob) as any[];
-const projects = Object.values(projectsGlob) as any[];
-const studies = Object.values(studiesGlob) as any[];
-const contact = Object.values(contactGlob) as any[];
-const PDF = "/MyResume.pdf";
+// TypeScript interfaces for markdown frontmatter
+interface WorkFrontmatter {
+  title: string;
+  date: string;
+  tags?: string[];
+  url?: string;
+  org?: string;
+  location?: string;
+}
+
+interface ProjectFrontmatter {
+  title: string;
+  date: string;
+  tags?: string[];
+  url?: string;
+  image?: string;
+  github?: string;
+}
+
+interface StudyFrontmatter {
+  title: string;
+  date: string;
+  tags?: string[];
+  location?: string;
+  institute?: string;
+}
+
+interface ContactFrontmatter {
+  title: string;
+  url: string;
+  icon: string;
+}
+
+interface MarkdownFile<T> {
+  frontmatter: T;
+  compiledContent: () => string;
+  url?: string;
+}
+
+const worksGlob = import.meta.glob<MarkdownFile<WorkFrontmatter>>("../pages/works/*.md", { eager: true });
+const projectsGlob = import.meta.glob<MarkdownFile<ProjectFrontmatter>>("../pages/projects/*.md", { eager: true });
+const studiesGlob = import.meta.glob<MarkdownFile<StudyFrontmatter>>("../pages/studies/*.md", { eager: true });
+const contactGlob = import.meta.glob<MarkdownFile<ContactFrontmatter>>("../pages/contact/*.md", { eager: true });
+
+const works = Object.values(worksGlob);
+const projects = Object.values(projectsGlob);
+const studies = Object.values(studiesGlob);
+const contact = Object.values(contactGlob);
 
 // Sort by date (newest first) - extract year from date string
-const sortByDate = (items: any[]) => {
-  return items.sort((a, b) => {
+const sortByDate = <T extends { frontmatter: { date: string } }>(items: T[]): T[] => {
+  return [...items].sort((a, b) => {
     const dateA = a.frontmatter.date || "";
     const dateB = b.frontmatter.date || "";
     

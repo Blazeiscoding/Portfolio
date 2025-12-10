@@ -55,6 +55,8 @@ const { username } = Astro.props;
 <script define:vars={{ username }}>
   // Animated counter with easing
   function animateCounter(element, target, duration = 1500) {
+    if (!element) return;
+    
     const start = 0;
     const startTime = performance.now();
     
@@ -67,12 +69,12 @@ const { username } = Astro.props;
       const easedProgress = easeOutCubic(progress);
       const current = Math.floor(start + (target - start) * easedProgress);
       
-      element.textContent = current;
+      element.textContent = current.toString();
       
       if (progress < 1) {
         requestAnimationFrame(update);
       } else {
-        element.textContent = target;
+        element.textContent = target.toString();
       }
     }
     
@@ -82,17 +84,32 @@ const { username } = Astro.props;
   // Store fetched data for animation
   let statsData = null;
   let hasAnimated = false;
+  let hasFetched = false;
   
   async function fetchGitHubStats() {
+    // Prevent duplicate fetches
+    if (hasFetched) return;
+    hasFetched = true;
+    
+    const reposEl = document.getElementById('repos-count');
+    const followersEl = document.getElementById('followers-count');
+    const followingEl = document.getElementById('following-count');
+    const starsEl = document.getElementById('stars-count');
+    
     try {
       const res = await fetch(`/api/github-stats?username=${username}`);
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: Failed to fetch GitHub stats`);
+      }
+      
       statsData = await res.json();
       
       // Set initial values to 0 (will animate when scrolled into view)
-      document.getElementById('repos-count').textContent = '0';
-      document.getElementById('followers-count').textContent = '0';
-      document.getElementById('following-count').textContent = '0';
-      document.getElementById('stars-count').textContent = '0';
+      if (reposEl) reposEl.textContent = '0';
+      if (followersEl) followersEl.textContent = '0';
+      if (followingEl) followingEl.textContent = '0';
+      if (starsEl) starsEl.textContent = '0';
       
       if (statsData.hasToken && statsData.privateRepos > 0) {
         const reposLabel = document.querySelector('#repos-count + div');
@@ -103,7 +120,14 @@ const { username } = Astro.props;
       
       // Check if already in view
       checkAndAnimate();
-    } catch (e) {}
+    } catch (error) {
+      console.error('Failed to fetch GitHub stats:', error);
+      // Show error state
+      if (reposEl) reposEl.textContent = '--';
+      if (followersEl) followersEl.textContent = '--';
+      if (followingEl) followingEl.textContent = '--';
+      if (starsEl) starsEl.textContent = '--';
+    }
   }
   
   function animateStats() {
@@ -116,15 +140,15 @@ const { username } = Astro.props;
     const starsEl = document.getElementById('stars-count');
     
     // Stagger animations for visual effect
-    if (reposEl) animateCounter(reposEl, statsData.repos || 0, 1200);
+    animateCounter(reposEl, statsData.repos || 0, 1200);
     setTimeout(() => {
-      if (followersEl) animateCounter(followersEl, statsData.followers || 0, 1200);
+      animateCounter(followersEl, statsData.followers || 0, 1200);
     }, 150);
     setTimeout(() => {
-      if (followingEl) animateCounter(followingEl, statsData.following || 0, 1200);
+      animateCounter(followingEl, statsData.following || 0, 1200);
     }, 300);
     setTimeout(() => {
-      if (starsEl) animateCounter(starsEl, statsData.stars || 0, 1200);
+      animateCounter(starsEl, statsData.stars || 0, 1200);
     }, 450);
   }
   
@@ -148,8 +172,8 @@ const { username } = Astro.props;
     observer.observe(statsContainer);
   }
   
+  // Single fetch call - script runs at end of body so DOM is ready
   fetchGitHubStats();
-  document.addEventListener('DOMContentLoaded', fetchGitHubStats);
 </script>
 
 <style is:global>
