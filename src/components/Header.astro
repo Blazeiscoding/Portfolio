@@ -81,11 +81,19 @@ const heroHighlights = [
           href={resumeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="btn btn-outline btn-sm md:btn-md gap-2"
+          class="btn btn-outline btn-sm md:btn-md gap-2 group relative resume-download-btn"
           aria-label="Download resume PDF (opens in new tab)"
+          id="resume-btn"
         >
-          <Icon name="carbon:document-pdf" class="w-4 h-4" aria-hidden="true" />
+          <Icon name="carbon:document-pdf" class="w-4 h-4 group-hover:animate-bounce" aria-hidden="true" />
           Resume
+          <span 
+            id="download-counter" 
+            class="badge badge-xs badge-primary absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-[10px] font-bold"
+            title="Total downloads"
+          >
+            0
+          </span>
         </a>
       </div>
     </section>
@@ -115,6 +123,31 @@ const heroHighlights = [
     void typewriter.offsetWidth;
     typewriter.style.width = '0';
     typewriter.style.animation = `typing 3.5s steps(${length}, end) forwards`;
+  }
+
+  // Resume Download Counter
+  const resumeBtn = document.getElementById('resume-btn');
+  const counterEl = document.getElementById('download-counter');
+  
+  if (resumeBtn && counterEl) {
+    // Load and display count
+    const getCount = () => parseInt(localStorage.getItem('resumeDownloads') || '0');
+    const updateDisplay = (count: number) => {
+      counterEl.textContent = count > 999 ? '999+' : count.toString();
+    };
+    
+    updateDisplay(getCount());
+    
+    // Track clicks
+    resumeBtn.addEventListener('click', () => {
+      const newCount = getCount() + 1;
+      localStorage.setItem('resumeDownloads', newCount.toString());
+      updateDisplay(newCount);
+      
+      // Pulse animation
+      counterEl.classList.add('animate-ping');
+      setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
+    });
   }
 </script>
 
