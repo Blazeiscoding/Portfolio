@@ -16,17 +16,22 @@ const heroHighlights = [
     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
       <article class="flex flex-col sm:flex-row items-center gap-4 w-full">
         <div
-          class="flex-shrink-0 w-24 md:w-28 rounded-full shadow-lg ring-4 ring-primary/20 hover:ring-primary/40 transition-all duration-500 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 p-1"
+          class="profile-tilt-wrapper flex-shrink-0 w-24 md:w-28 rounded-full shadow-lg ring-4 ring-primary/20 hover:ring-primary/40 hover:ring-8 transition-all duration-500 overflow-visible bg-gradient-to-br from-primary/20 to-secondary/20 p-1 cursor-pointer"
+          data-tilt-profile
         >
-          <img
-            alt={`${about.frontmatter.name} profile picture`}
-            src="/profile.webp"
-            class="grayscale-[30] hover:grayscale-0 transition-all duration-500 rounded-full w-full h-full object-cover"
-            width="112"
-            height="112"
-            loading="eager"
-            decoding="async"
-          />
+          <div class="profile-inner relative rounded-full overflow-hidden">
+            <img
+              alt={`${about.frontmatter.name} profile picture`}
+              src="/profile.webp"
+              class="grayscale-[30] hover:grayscale-0 transition-all duration-500 rounded-full w-full h-full object-cover"
+              width="112"
+              height="112"
+              loading="eager"
+              decoding="async"
+            />
+            <!-- Glow overlay -->
+            <div class="absolute inset-0 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" style="background: radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), oklch(var(--p) / 0.4), transparent 60%);"></div>
+          </div>
         </div>
         <div class="text-center sm:text-left">
           <div class="flex flex-wrap justify-center sm:justify-start items-center gap-3 mb-3">
@@ -149,6 +154,35 @@ const heroHighlights = [
       setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
     });
   }
+
+  // Profile Image Tilt Effect
+  const profileWrapper = document.querySelector('[data-tilt-profile]') as HTMLElement;
+  if (profileWrapper) {
+    const inner = profileWrapper.querySelector('.profile-inner') as HTMLElement;
+    
+    profileWrapper.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = profileWrapper.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / 5;
+      const rotateY = (centerX - x) / 5;
+      
+      profileWrapper.style.transform = `perspective(500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
+      
+      // Update glow position
+      if (inner) {
+        inner.style.setProperty('--glow-x', `${(x / rect.width) * 100}%`);
+        inner.style.setProperty('--glow-y', `${(y / rect.height) * 100}%`);
+      }
+    });
+    
+    profileWrapper.addEventListener('mouseleave', () => {
+      profileWrapper.style.transform = 'perspective(500px) rotateX(0) rotateY(0) scale(1)';
+    });
+  }
 </script>
 
 <style>
@@ -173,6 +207,18 @@ const heroHighlights = [
   @keyframes blink {
     from, to { opacity: 1 }
     50% { opacity: 0 }
+  }
+
+  /* Profile tilt effect */
+  .profile-tilt-wrapper {
+    transform-style: preserve-3d;
+    transition: transform 0.15s ease-out, ring 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .profile-tilt-wrapper:hover {
+    box-shadow: 
+      0 20px 40px -10px oklch(var(--p) / 0.3),
+      0 10px 20px -5px oklch(var(--bc) / 0.1);
   }
 
   .theme-toggle-input {

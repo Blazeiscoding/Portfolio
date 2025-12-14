@@ -10,44 +10,77 @@ const { username } = Astro.props;
 
 <div class="github-activity w-full">
   <div class="flex items-center gap-2 mb-4">
-    <Icon name="carbon:logo-github" class="w-5 h-5 text-primary" aria-hidden="true" />
+    <Icon name="carbon:logo-github" class="w-5 h-5 text-primary animate-pulse" aria-hidden="true" />
     <h3 class="text-lg font-bold text-base-content">GitHub Activity</h3>
     <a 
       href={`https://github.com/${username}`}
       target="_blank"
       rel="noopener noreferrer"
-      class="ml-auto text-sm text-primary hover:underline"
+      class="ml-auto text-sm text-primary hover:underline hover:scale-105 transition-transform"
     >
       @{username}
     </a>
   </div>
   
-  <div class="contribution-wrapper rounded-xl border border-base-content/20 bg-base-200/80 backdrop-blur-md p-4 overflow-hidden">
+  <!-- Contribution Graph with Skeleton -->
+  <div class="contribution-wrapper glass-panel rounded-xl p-4 overflow-hidden relative">
+    <!-- Skeleton loader -->
+    <div class="skeleton-graph absolute inset-4 rounded-lg animate-pulse bg-gradient-to-r from-base-300 via-base-200 to-base-300 bg-[length:200%_100%]" id="graph-skeleton"></div>
     <img 
       src={`https://ghchart.rshah.org/6366f1/${username}`}
       alt={`${username}'s GitHub contribution graph`}
-      class="w-full h-auto contribution-graph"
+      class="w-full h-auto contribution-graph opacity-0 transition-opacity duration-500"
       loading="lazy"
       decoding="async"
+      id="contribution-img"
+      onload="this.classList.remove('opacity-0'); document.getElementById('graph-skeleton')?.classList.add('hidden');"
     />
   </div>
   
+  <!-- Stats Grid with Skeleton -->
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4" id="github-stats">
-    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
-      <div class="text-2xl font-bold stat-number" id="repos-count">--</div>
-      <div class="text-xs text-base-content/70">Repositories</div>
+    <div class="stat-card glass-panel rounded-xl p-4 text-center group" data-stat="repos">
+      <div class="skeleton-stat" id="skeleton-repos">
+        <div class="h-8 w-12 mx-auto rounded bg-base-300 animate-pulse mb-2"></div>
+        <div class="h-3 w-16 mx-auto rounded bg-base-300 animate-pulse"></div>
+      </div>
+      <div class="stat-content hidden" id="content-repos">
+        <div class="text-2xl font-bold stat-number group-hover:scale-110 transition-transform" id="repos-count">0</div>
+        <div class="text-xs text-base-content/70 mt-1">Repositories</div>
+      </div>
     </div>
-    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
-      <div class="text-2xl font-bold stat-number" id="followers-count">--</div>
-      <div class="text-xs text-base-content/70">Followers</div>
+    
+    <div class="stat-card glass-panel rounded-xl p-4 text-center group" data-stat="followers">
+      <div class="skeleton-stat" id="skeleton-followers">
+        <div class="h-8 w-12 mx-auto rounded bg-base-300 animate-pulse mb-2"></div>
+        <div class="h-3 w-16 mx-auto rounded bg-base-300 animate-pulse"></div>
+      </div>
+      <div class="stat-content hidden" id="content-followers">
+        <div class="text-2xl font-bold stat-number group-hover:scale-110 transition-transform" id="followers-count">0</div>
+        <div class="text-xs text-base-content/70 mt-1">Followers</div>
+      </div>
     </div>
-    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
-      <div class="text-2xl font-bold stat-number" id="following-count">--</div>
-      <div class="text-xs text-base-content/70">Following</div>
+    
+    <div class="stat-card glass-panel rounded-xl p-4 text-center group" data-stat="following">
+      <div class="skeleton-stat" id="skeleton-following">
+        <div class="h-8 w-12 mx-auto rounded bg-base-300 animate-pulse mb-2"></div>
+        <div class="h-3 w-16 mx-auto rounded bg-base-300 animate-pulse"></div>
+      </div>
+      <div class="stat-content hidden" id="content-following">
+        <div class="text-2xl font-bold stat-number group-hover:scale-110 transition-transform" id="following-count">0</div>
+        <div class="text-xs text-base-content/70 mt-1">Following</div>
+      </div>
     </div>
-    <div class="stat-card rounded-lg border border-base-content/20 bg-base-200/80 backdrop-blur-md p-3 text-center hover:border-primary/50 transition-all">
-      <div class="text-2xl font-bold stat-number" id="stars-count">--</div>
-      <div class="text-xs text-base-content/70">Total Stars</div>
+    
+    <div class="stat-card glass-panel rounded-xl p-4 text-center group" data-stat="stars">
+      <div class="skeleton-stat" id="skeleton-stars">
+        <div class="h-8 w-12 mx-auto rounded bg-base-300 animate-pulse mb-2"></div>
+        <div class="h-3 w-16 mx-auto rounded bg-base-300 animate-pulse"></div>
+      </div>
+      <div class="stat-content hidden" id="content-stars">
+        <div class="text-2xl font-bold stat-number group-hover:scale-110 transition-transform" id="stars-count">0</div>
+        <div class="text-xs text-base-content/70 mt-1">Total Stars</div>
+      </div>
     </div>
   </div>
 </div>
@@ -81,6 +114,20 @@ const { username } = Astro.props;
     requestAnimationFrame(update);
   }
   
+  // Hide skeleton and show content with animation
+  function revealStat(statType, delay = 0) {
+    setTimeout(() => {
+      const skeleton = document.getElementById(`skeleton-${statType}`);
+      const content = document.getElementById(`content-${statType}`);
+      
+      if (skeleton && content) {
+        skeleton.classList.add('hidden');
+        content.classList.remove('hidden');
+        content.classList.add('animate-fade-in');
+      }
+    }, delay);
+  }
+  
   // Store fetched data for animation
   let statsData = null;
   let hasAnimated = false;
@@ -105,6 +152,12 @@ const { username } = Astro.props;
       
       statsData = await res.json();
       
+      // Reveal stats with staggered animation
+      revealStat('repos', 100);
+      revealStat('followers', 200);
+      revealStat('following', 300);
+      revealStat('stars', 400);
+      
       // Set initial values to 0 (will animate when scrolled into view)
       if (reposEl) reposEl.textContent = '0';
       if (followersEl) followersEl.textContent = '0';
@@ -122,7 +175,10 @@ const { username } = Astro.props;
       checkAndAnimate();
     } catch (error) {
       console.error('Failed to fetch GitHub stats:', error);
-      // Show error state
+      // Show error state - reveal all and show --
+      ['repos', 'followers', 'following', 'stars'].forEach((stat, i) => {
+        revealStat(stat, i * 100);
+      });
       if (reposEl) reposEl.textContent = '--';
       if (followersEl) followersEl.textContent = '--';
       if (followingEl) followingEl.textContent = '--';
@@ -177,6 +233,21 @@ const { username } = Astro.props;
 </script>
 
 <style is:global>
+  /* Glass panel styling */
+  .glass-panel {
+    background: linear-gradient(
+      135deg,
+      oklch(var(--b2) / 0.8) 0%,
+      oklch(var(--b1) / 0.6) 100%
+    );
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid oklch(var(--bc) / 0.1);
+    box-shadow: 
+      0 4px 20px oklch(var(--bc) / 0.05),
+      inset 0 1px 0 oklch(var(--b1) / 0.5);
+  }
+  
   .contribution-graph {
     filter: grayscale(0);
   }
@@ -185,12 +256,23 @@ const { username } = Astro.props;
     filter: invert(1) hue-rotate(180deg);
   }
   
+  [data-theme="black"] .glass-panel {
+    background: linear-gradient(
+      135deg,
+      rgba(25, 25, 25, 0.95) 0%,
+      rgba(35, 35, 35, 0.8) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
   .stat-number {
     color: oklch(var(--p));
+    text-shadow: 0 0 20px oklch(var(--p) / 0.3);
   }
   
   [data-theme="black"] .stat-number {
     color: #ffffff !important;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
   }
   
   .private-repos-label {
@@ -201,21 +283,38 @@ const { username } = Astro.props;
     color: #ffffff !important;
   }
   
-  [data-theme="black"] .stat-card {
-    background-color: rgba(30, 30, 30, 0.9) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-  }
-  
-  [data-theme="black"] .contribution-wrapper {
-    background-color: rgba(30, 30, 30, 0.9) !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-  }
-  
   .stat-card {
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
   
   .stat-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 30px -10px oklch(var(--p) / 0.3);
+    border-color: oklch(var(--p) / 0.4);
+  }
+  
+  /* Skeleton animation */
+  .skeleton-graph {
+    animation: shimmer 2s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  @keyframes fade-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out forwards;
   }
 </style>

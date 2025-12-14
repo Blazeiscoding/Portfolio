@@ -7,6 +7,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
+import { inject } from "@vercel/analytics";
 
 const siteUrl = "https://nikhilrathore.com";
 const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
@@ -53,12 +54,27 @@ const sameAsLinks = [
         themeToggle.checked = currentTheme === "black";
         themeToggle.setAttribute("aria-checked", (currentTheme === "black").toString());
         
-        // Ultra-smooth theme change using View Transition API for Chromium
-        const applyTheme = async (isDark: boolean) => {
+        // Ultra-smooth theme change with circular reveal animation
+        const applyTheme = async (isDark: boolean, e?: Event) => {
           const newTheme = isDark ? "black" : "lofi";
           
           // Check if View Transition API is supported (Chromium)
           if (document.startViewTransition) {
+            // Get toggle position for circular reveal
+            const toggle = document.getElementById('theme-toggle');
+            let x = window.innerWidth / 2;
+            let y = 0;
+            
+            if (toggle) {
+              const rect = toggle.getBoundingClientRect();
+              x = rect.left + rect.width / 2;
+              y = rect.top + rect.height / 2;
+            }
+            
+            // Set CSS custom properties for circular animation
+            document.documentElement.style.setProperty('--theme-x', `${x}px`);
+            document.documentElement.style.setProperty('--theme-y', `${y}px`);
+            
             document.startViewTransition(() => {
               localStorage.setItem("theme", newTheme);
               document.documentElement.setAttribute("data-theme", newTheme);
@@ -138,6 +154,7 @@ const sameAsLinks = [
   </head>
   <body class="flex flex-col min-h-screen relative">
     <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-primary z-[10000] transition-all duration-100 ease-out" style="width: 0%"></div>
+    
     <Header />
 
     <div
@@ -294,6 +311,12 @@ const sameAsLinks = [
         };
       });
     </script>
+    
+    <!-- Vercel Analytics -->
+    <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
     <Footer class="flex justify-center items-center py-4" />
   </body>
 </html>
@@ -361,11 +384,34 @@ const sameAsLinks = [
     will-change: transform;
   }
   
-  /* View Transition API - ultra-smooth for Chromium */
+  /* Circular reveal theme transition */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation-duration: 0.4s;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+  
+  ::view-transition-new(root) {
+    z-index: 9999;
+    animation: circular-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  @keyframes circular-reveal {
+    from {
+      clip-path: circle(0% at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+    to {
+      clip-path: circle(150% at var(--theme-x, 50%) var(--theme-y, 50%));
+    }
+  }
+  
+  /* Reverse animation for going to light mode */
+  [data-theme="lofi"]::view-transition-new(root) {
+    animation: circular-reveal 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   /* Fallback transitions for Firefox and browsers without View Transition API */
