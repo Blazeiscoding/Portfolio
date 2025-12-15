@@ -72,7 +72,6 @@ const shareLinks = {
 </div>
 
 <script>
-  // Copy to clipboard functionality
   document.addEventListener("DOMContentLoaded", () => {
     const copyButtons = document.querySelectorAll(".copy-link-btn");
     
@@ -81,11 +80,11 @@ const shareLinks = {
         const url = button.getAttribute("data-url");
         if (!url) return;
         
+        const originalText = button.innerHTML;
+        
         try {
           await navigator.clipboard.writeText(url);
           
-          // Visual feedback
-          const originalText = button.innerHTML;
           button.innerHTML = `
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -100,7 +99,6 @@ const shareLinks = {
           }, 2000);
         } catch (err) {
           console.error("Failed to copy:", err);
-          // Fallback for older browsers
           const textArea = document.createElement("textarea");
           textArea.value = url;
           document.body.appendChild(textArea);

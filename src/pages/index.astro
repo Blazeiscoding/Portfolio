@@ -14,7 +14,6 @@ const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
 const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. Full-Stack Developer skilled in building scalable web applications using React, Next.js, Node.js, and modern UI frameworks. Experienced in developing RESTful APIs, managing databases with PostgreSQL and MongoDB, and deploying production-ready apps.`;
 const imageUrl = `${siteUrl}/snap_laptop.webp`;
 
-// Get contact links for structured data
 const contactLinksGlob = import.meta.glob("../pages/contact/*.md", { eager: true });
 const contactLinks = Object.values(contactLinksGlob) as any[];
 const sameAsLinks = [
@@ -26,15 +25,12 @@ const sameAsLinks = [
 <html lang="en">
   <head>
     <script is:inline>
-      // Set theme before page render to prevent flash
       (function() {
         const savedTheme = localStorage.getItem("theme");
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         const theme = savedTheme || (prefersDark ? "black" : "lofi");
         document.documentElement.setAttribute("data-theme", theme);
-        // No transition on initial load for instant theme application
         
-        // Set checkbox state
         const isDark = theme === "black";
         const checkbox = document.getElementById("theme-toggle");
         if (checkbox) {
@@ -44,23 +40,18 @@ const sameAsLinks = [
       })();
     </script>
     <script>
-      // Custom smooth theme handler - bypass theme-change for better control
       document.addEventListener("DOMContentLoaded", () => {
         const themeToggle = document.querySelector('[data-toggle-theme]') as HTMLInputElement;
         if (!themeToggle) return;
         
-        // Set initial state
         const currentTheme = document.documentElement.getAttribute("data-theme");
         themeToggle.checked = currentTheme === "black";
         themeToggle.setAttribute("aria-checked", (currentTheme === "black").toString());
         
-        // Ultra-smooth theme change with circular reveal animation
         const applyTheme = async (isDark: boolean, e?: Event) => {
           const newTheme = isDark ? "black" : "lofi";
           
-          // Check if View Transition API is supported (Chromium)
           if (document.startViewTransition) {
-            // Get toggle position for circular reveal
             const toggle = document.getElementById('theme-toggle');
             let x = window.innerWidth / 2;
             let y = 0;
@@ -71,7 +62,6 @@ const sameAsLinks = [
               y = rect.top + rect.height / 2;
             }
             
-            // Set CSS custom properties for circular animation
             document.documentElement.style.setProperty('--theme-x', `${x}px`);
             document.documentElement.style.setProperty('--theme-y', `${y}px`);
             
@@ -80,13 +70,11 @@ const sameAsLinks = [
               document.documentElement.setAttribute("data-theme", newTheme);
             });
           } else {
-            // Fallback for Firefox and older browsers
             localStorage.setItem("theme", newTheme);
             document.documentElement.setAttribute("data-theme", newTheme);
           }
         };
         
-        // Single event handler to avoid duplicate calls
         themeToggle.addEventListener('change', (e) => {
           const target = e.target as HTMLInputElement;
           const isDark = target.checked;
@@ -174,7 +162,6 @@ const sameAsLinks = [
     </main>
     
     <script>
-      // Scroll Progress Bar + Parallax Effect
       window.addEventListener("scroll", () => {
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -184,12 +171,10 @@ const sameAsLinks = [
           progressBar.style.width = scrolled + "%";
         }
         
-        // Parallax effect on background
         const parallaxSpeed = 0.3;
         document.body.style.setProperty('--parallax-y', `${winScroll * parallaxSpeed}px`);
       });
 
-      // Intersection Observer for scroll animations
       document.addEventListener("DOMContentLoaded", () => {
         const observerOptions = {
           threshold: 0.1,
@@ -201,7 +186,6 @@ const sameAsLinks = [
             if (entry.isIntersecting) {
               entry.target.classList.add("visible");
               
-              // Trigger staggered animations for children
               const staggerItems = entry.target.querySelectorAll(".stagger-item");
               staggerItems.forEach((item, index) => {
                 (item as HTMLElement).style.transitionDelay = `${index * 100}ms`;
@@ -211,7 +195,6 @@ const sameAsLinks = [
           });
         }, observerOptions);
         
-        // Observe all accordion sections
         document.querySelectorAll(".collapse").forEach(section => {
           section.classList.add("animate-on-scroll");
           observer.observe(section);
@@ -229,7 +212,6 @@ const sameAsLinks = [
                   behavior: 'smooth',
                   block: 'start'
                 });
-                // Update URL without page jump
                 history.pushState(null, '', href);
               }
             }
@@ -256,11 +238,9 @@ const sameAsLinks = [
             return canvas.toDataURL('image/png');
           };
           
-          // Only animate on user interaction (not on load to avoid distraction)
           let isAnimating = false;
           document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-              // When tab loses focus, start favicon animation
               isAnimating = true;
               const interval = setInterval(() => {
                 if (!isAnimating || !document.hidden) {
@@ -301,7 +281,6 @@ const sameAsLinks = [
         
         console.log('%c🎮 Pro tip: Try typing "hire()" in the console 😉', 'color: #f59e0b; font-size: 11px;');
         
-        // Hidden function easter egg
         (window as any).hire = () => {
           console.log('%c\n🎉 GREAT CHOICE! 🎉', 'font-size: 20px; color: #10b981;');
           console.log('%cI\'m currently open to exciting opportunities!', 'font-size: 14px; color: #64748b;');

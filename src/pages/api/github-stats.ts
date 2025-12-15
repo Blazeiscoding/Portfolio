@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
-// TypeScript interfaces for GitHub API responses
+
 interface GitHubUser {
   login: string;
   id: number;

@@ -86,14 +86,12 @@ const { username } = Astro.props;
 </div>
 
 <script define:vars={{ username }}>
-  // Animated counter with easing
   function animateCounter(element, target, duration = 1500) {
     if (!element) return;
     
     const start = 0;
     const startTime = performance.now();
     
-    // Easing function (ease-out cubic)
     const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
     
     function update(currentTime) {
@@ -114,7 +112,6 @@ const { username } = Astro.props;
     requestAnimationFrame(update);
   }
   
-  // Hide skeleton and show content with animation
   function revealStat(statType, delay = 0) {
     setTimeout(() => {
       const skeleton = document.getElementById(`skeleton-${statType}`);
@@ -128,13 +125,11 @@ const { username } = Astro.props;
     }, delay);
   }
   
-  // Store fetched data for animation
   let statsData = null;
   let hasAnimated = false;
   let hasFetched = false;
   
   async function fetchGitHubStats() {
-    // Prevent duplicate fetches
     if (hasFetched) return;
     hasFetched = true;
     
@@ -152,13 +147,11 @@ const { username } = Astro.props;
       
       statsData = await res.json();
       
-      // Reveal stats with staggered animation
       revealStat('repos', 100);
       revealStat('followers', 200);
       revealStat('following', 300);
       revealStat('stars', 400);
       
-      // Set initial values to 0 (will animate when scrolled into view)
       if (reposEl) reposEl.textContent = '0';
       if (followersEl) followersEl.textContent = '0';
       if (followingEl) followingEl.textContent = '0';
@@ -171,11 +164,9 @@ const { username } = Astro.props;
         }
       }
       
-      // Check if already in view
       checkAndAnimate();
     } catch (error) {
       console.error('Failed to fetch GitHub stats:', error);
-      // Show error state - reveal all and show --
       ['repos', 'followers', 'following', 'stars'].forEach((stat, i) => {
         revealStat(stat, i * 100);
       });
@@ -195,7 +186,6 @@ const { username } = Astro.props;
     const followingEl = document.getElementById('following-count');
     const starsEl = document.getElementById('stars-count');
     
-    // Stagger animations for visual effect
     animateCounter(reposEl, statsData.repos || 0, 1200);
     setTimeout(() => {
       animateCounter(followersEl, statsData.followers || 0, 1200);
