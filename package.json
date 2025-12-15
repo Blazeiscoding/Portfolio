@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
     "@astrojs/tailwind": "^6.0.2",
-    "@astrojs/vercel": "^9.0.2",
+    "@astrojs/vercel": "^8.0.4",
     "@fontsource-variable/dm-sans": "^5.0.5",
     "@fontsource-variable/outfit": "^5.2.8",
     "@iconify-json/carbon": "^1.1.31",
