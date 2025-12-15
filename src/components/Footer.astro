@@ -1,44 +1,56 @@
 ---
 import { Icon } from "astro-icon/components";
+
+interface ContactFrontmatter {
+  title: string;
+  url: string;
+  icon: string;
+}
+
+interface MarkdownFile {
+  frontmatter: ContactFrontmatter;
+}
+
+const contactGlob = import.meta.glob<MarkdownFile>("../pages/contact/*.md", { eager: true });
+const contacts = Object.values(contactGlob);
+
 const getYear = () => new Date().getFullYear().toString();
 ---
 
-<footer class="flex flex-col justify-center items-center bg-transparent py-8 gap-4 relative">
+<footer class="flex flex-col justify-center items-center bg-transparent py-8 gap-6 relative" id="contact">
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-base-content/10 to-transparent"></div>
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent blur-sm"></div>
-  <div class="flex gap-4">
-    <a 
-      href="https://github.com/Blazeiscoding" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 hover:text-primary transition-colors"
-      aria-label="GitHub"
-    >
-      <Icon name="carbon:logo-github" class="w-5 h-5" />
-    </a>
-    <a 
-      href="https://linkedin.com/in/nikhil-rathore" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      class="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 hover:text-primary transition-colors"
-      aria-label="LinkedIn"
-    >
-      <Icon name="carbon:logo-linkedin" class="w-5 h-5" />
-    </a>
-    <a 
-      href="mailto:contact@nikhilrathore.com" 
-      class="btn btn-ghost btn-circle btn-sm hover:bg-primary/10 hover:text-primary transition-colors"
-      aria-label="Email"
-    >
-      <Icon name="carbon:email" class="w-5 h-5" />
-    </a>
+  
+  <div class="text-center mb-2">
+    <p class="text-sm text-base-content/60">Feel free to reach out!</p>
   </div>
   
-  <div class="flex items-center gap-2 text-sm text-base-content/60 font-light">
+  <div class="flex flex-wrap justify-center gap-3">
+    {contacts.map((contact) => (
+      <a 
+        href={contact.frontmatter.url}
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="contact-link btn btn-ghost btn-sm gap-2 hover:bg-primary/10 hover:text-primary transition-all duration-300 group"
+        aria-label={`${contact.frontmatter.title} (opens in new tab)`}
+      >
+        <Icon 
+          name={contact.frontmatter.icon} 
+          class="w-5 h-5 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300" 
+          aria-hidden="true"
+        />
+        <span class="hidden sm:inline text-sm">{contact.frontmatter.title}</span>
+      </a>
+    ))}
+  </div>
+  
+  <div class="flex items-center gap-2 text-sm text-base-content/60 font-light mt-2">
     <p>&copy; {getYear()} Nikhil Rathore</p>
     <span class="w-1 h-1 rounded-full bg-base-content/30"></span>
     <div class="flex items-center gap-1">
-      <span>Made in</span>
+      <span>Made with</span>
+      <span class="text-red-500 animate-pulse">❤</span>
+      <span>in</span>
       <img
         class="rounded-sm w-4 h-3 shadow-sm"
         src="/in.webp"
@@ -50,3 +62,23 @@ const getYear = () => new Date().getFullYear().toString();
     </div>
   </div>
 </footer>
+
+<style>
+  .contact-link {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .contact-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, oklch(var(--p) / 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  
+  .contact-link:hover::before {
+    transform: translateX(100%);
+  }
+</style>

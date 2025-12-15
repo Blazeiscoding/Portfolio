@@ -1,7 +1,6 @@
 ---
 import AccordionLayout from "../layouts/AccordionLayout.astro";
 import Card from "./Card.astro";
-import ContactCard from "./ContactCard.astro";
 import Skills from "./Skills.astro";
 import GitHubActivity from "./GitHubActivity.astro";
 
@@ -32,11 +31,6 @@ interface StudyFrontmatter {
   institute?: string;
 }
 
-interface ContactFrontmatter {
-  title: string;
-  url: string;
-  icon: string;
-}
 
 interface MarkdownFile<T> {
   frontmatter: T;
@@ -47,12 +41,10 @@ interface MarkdownFile<T> {
 const worksGlob = import.meta.glob<MarkdownFile<WorkFrontmatter>>("../pages/works/*.md", { eager: true });
 const projectsGlob = import.meta.glob<MarkdownFile<ProjectFrontmatter>>("../pages/projects/*.md", { eager: true });
 const studiesGlob = import.meta.glob<MarkdownFile<StudyFrontmatter>>("../pages/studies/*.md", { eager: true });
-const contactGlob = import.meta.glob<MarkdownFile<ContactFrontmatter>>("../pages/contact/*.md", { eager: true });
 
 const works = Object.values(worksGlob);
 const projects = Object.values(projectsGlob);
 const studies = Object.values(studiesGlob);
-const contact = Object.values(contactGlob);
 
 // Sort by date (newest first) - extract year from date string
 const sortByDate = <T extends { frontmatter: { date: string } }>(items: T[]): T[] => {
@@ -147,24 +139,6 @@ const sortedStudies = sortByDate(studies);
   <section id="github" class="scroll-mt-32">
     <AccordionLayout title={"GitHub"} icon={"carbon:logo-github"}>
       <GitHubActivity username="Blazeiscoding" />
-    </AccordionLayout>
-  </section>
-
-  <section id="contact" class="scroll-mt-32">
-    <AccordionLayout title={"Contact"} icon={"carbon:location-person"}>
-      <div class="flex flex-wrap content-around gap-4 justify-center">
-        {
-          contact.map((item) => {
-            return (
-              <ContactCard
-                url={item.frontmatter.url}
-                url_name={item.frontmatter.title}
-                icon={item.frontmatter.icon}
-              />
-            );
-          })
-        }
-      </div>
     </AccordionLayout>
   </section>
 </div>

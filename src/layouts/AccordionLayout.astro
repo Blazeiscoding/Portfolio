@@ -7,15 +7,16 @@ const { title, icon } = Astro.props;
 
 <BaseLayout>
   <Analytics />
-  <div class="collapse collapse-arrow ease-in-out duration-700 animate-on-scroll">
+  <div class="collapse collapse-arrow ease-in-out duration-700 animate-on-scroll accordion-section">
     <input 
       aria-label={`Toggle ${title} section`} 
       type="checkbox"
       aria-expanded="false"
+      class="accordion-checkbox"
     />
     <div class="collapse-title font-extrabold tracking-tight md:text-2xl">
-      <div class="flex">
-        <Icon name={icon} class="w-8 h-8 mr-4" aria-hidden="true" />
+      <div class="flex items-center">
+        <Icon name={icon} class="accordion-icon w-8 h-8 mr-4" aria-hidden="true" />
         <h2>{title}</h2>
       </div>
     </div>
@@ -24,3 +25,24 @@ const { title, icon } = Astro.props;
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .accordion-icon {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                color 0.3s ease;
+  }
+  
+  .accordion-checkbox:checked ~ .collapse-title .accordion-icon {
+    transform: rotate(360deg) scale(1.1);
+    color: oklch(var(--p));
+  }
+  
+  .accordion-section:hover .accordion-icon {
+    transform: rotate(15deg);
+    color: oklch(var(--p) / 0.8);
+  }
+  
+  .accordion-checkbox:checked ~ .collapse-title:hover .accordion-icon {
+    transform: rotate(375deg) scale(1.1);
+  }
+</style>
