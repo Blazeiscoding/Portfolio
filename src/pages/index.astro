@@ -296,6 +296,12 @@ const sameAsLinks = [
       import { inject } from '@vercel/analytics';
       inject();
     </script>
+    
+    <!-- Vercel Speed Insights -->
+    <script>
+      import { injectSpeedInsights } from '@vercel/speed-insights';
+      injectSpeedInsights();
+    </script>
     <Footer class="flex justify-center items-center py-4" />
   </body>
 </html>
