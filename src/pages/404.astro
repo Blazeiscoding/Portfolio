@@ -1,0 +1,231 @@
+---
+import "@fontsource-variable/dm-sans";
+import "@fontsource-variable/outfit";
+import { Icon } from "astro-icon/components";
+import * as about from "./about/about.md";
+
+const siteUrl = "https://nikhilrathore.com";
+const siteName = `Page Not Found - ${about.frontmatter.name}`;
+---
+
+<html lang="en">
+  <head>
+    <script is:inline>
+      (function() {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = savedTheme || (prefersDark ? "black" : "lofi");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/favicon.webp" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{siteName}</title>
+  </head>
+  <body class="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <!-- Animated background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
+    
+    <!-- Floating elements -->
+    <div class="floating-elements absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="floating-shape shape-1"></div>
+      <div class="floating-shape shape-2"></div>
+      <div class="floating-shape shape-3"></div>
+    </div>
+    
+    <main class="relative z-10 text-center px-6 max-w-2xl mx-auto">
+      <!-- Glitch 404 text -->
+      <div class="glitch-wrapper mb-8">
+        <h1 class="glitch text-[8rem] md:text-[12rem] font-black leading-none" data-text="404">
+          404
+        </h1>
+      </div>
+      
+      <!-- Message -->
+      <div class="space-y-4 mb-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-base-content">
+          Oops! Lost in the <span class="text-primary">void</span>
+        </h2>
+        <p class="text-base-content/60 text-lg max-w-md mx-auto">
+          The page you're looking for has wandered off into the digital abyss. 
+          Don't worry, even the best explorers get lost sometimes!
+        </p>
+      </div>
+      
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a 
+          href="/" 
+          class="btn btn-primary btn-lg gap-3 group shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300"
+        >
+          <Icon name="carbon:home" class="w-5 h-5 group-hover:scale-110 transition-transform" />
+          Back to Home
+        </a>
+        <button 
+          onclick="history.back()"
+          class="btn btn-outline btn-lg gap-3 group hover:scale-105 transition-all duration-300"
+        >
+          <Icon name="carbon:arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+          Go Back
+        </button>
+      </div>
+      
+      <!-- Fun message -->
+      <div class="mt-12 pt-8 border-t border-base-content/10">
+        <p class="text-sm text-base-content/40 flex items-center justify-center gap-2">
+          <Icon name="carbon:idea" class="w-4 h-4" />
+          Pro tip: Check the URL or explore the homepage
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  html {
+    color-scheme: light dark;
+  }
+  
+  body {
+    font-family: "DM Sans Variable", sans-serif;
+    background-color: oklch(var(--b1));
+  }
+
+  /* Glitch effect */
+  .glitch {
+    position: relative;
+    color: oklch(var(--bc));
+    text-shadow: 
+      0.05em 0 0 oklch(var(--p) / 0.75),
+      -0.025em -0.05em 0 oklch(var(--s) / 0.75),
+      0.025em 0.05em 0 oklch(var(--a) / 0.75);
+    animation: glitch 500ms infinite;
+  }
+
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 oklch(var(--p));
+    clip: rect(24px, 550px, 90px, 0);
+    animation: glitch-anim 2s infinite linear alternate-reverse;
+  }
+
+  .glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 oklch(var(--s));
+    clip: rect(85px, 550px, 140px, 0);
+    animation: glitch-anim2 2s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitch {
+    0% { text-shadow: 0.05em 0 0 oklch(var(--p) / 0.75), -0.05em -0.025em 0 oklch(var(--s) / 0.75), -0.025em 0.05em 0 oklch(var(--a) / 0.75); }
+    14% { text-shadow: 0.05em 0 0 oklch(var(--p) / 0.75), -0.05em -0.025em 0 oklch(var(--s) / 0.75), -0.025em 0.05em 0 oklch(var(--a) / 0.75); }
+    15% { text-shadow: -0.05em -0.025em 0 oklch(var(--p) / 0.75), 0.025em 0.025em 0 oklch(var(--s) / 0.75), -0.05em -0.05em 0 oklch(var(--a) / 0.75); }
+    49% { text-shadow: -0.05em -0.025em 0 oklch(var(--p) / 0.75), 0.025em 0.025em 0 oklch(var(--s) / 0.75), -0.05em -0.05em 0 oklch(var(--a) / 0.75); }
+    50% { text-shadow: 0.025em 0.05em 0 oklch(var(--p) / 0.75), 0.05em 0 0 oklch(var(--s) / 0.75), 0 -0.05em 0 oklch(var(--a) / 0.75); }
+    99% { text-shadow: 0.025em 0.05em 0 oklch(var(--p) / 0.75), 0.05em 0 0 oklch(var(--s) / 0.75), 0 -0.05em 0 oklch(var(--a) / 0.75); }
+    100% { text-shadow: -0.025em 0 0 oklch(var(--p) / 0.75), -0.025em -0.025em 0 oklch(var(--s) / 0.75), -0.025em -0.05em 0 oklch(var(--a) / 0.75); }
+  }
+
+  @keyframes glitch-anim {
+    0% { clip: rect(46px, 9999px, 14px, 0); }
+    5% { clip: rect(76px, 9999px, 98px, 0); }
+    10% { clip: rect(34px, 9999px, 59px, 0); }
+    15% { clip: rect(22px, 9999px, 92px, 0); }
+    20% { clip: rect(64px, 9999px, 41px, 0); }
+    25% { clip: rect(12px, 9999px, 78px, 0); }
+    30% { clip: rect(88px, 9999px, 24px, 0); }
+    35% { clip: rect(56px, 9999px, 67px, 0); }
+    40% { clip: rect(38px, 9999px, 85px, 0); }
+    45% { clip: rect(71px, 9999px, 33px, 0); }
+    50% { clip: rect(19px, 9999px, 95px, 0); }
+    55% { clip: rect(82px, 9999px, 48px, 0); }
+    60% { clip: rect(27px, 9999px, 72px, 0); }
+    65% { clip: rect(93px, 9999px, 16px, 0); }
+    70% { clip: rect(41px, 9999px, 88px, 0); }
+    75% { clip: rect(68px, 9999px, 55px, 0); }
+    80% { clip: rect(14px, 9999px, 79px, 0); }
+    85% { clip: rect(54px, 9999px, 29px, 0); }
+    90% { clip: rect(86px, 9999px, 62px, 0); }
+    95% { clip: rect(32px, 9999px, 44px, 0); }
+    100% { clip: rect(77px, 9999px, 21px, 0); }
+  }
+
+  @keyframes glitch-anim2 {
+    0% { clip: rect(65px, 9999px, 32px, 0); }
+    5% { clip: rect(23px, 9999px, 87px, 0); }
+    10% { clip: rect(91px, 9999px, 45px, 0); }
+    15% { clip: rect(17px, 9999px, 73px, 0); }
+    20% { clip: rect(58px, 9999px, 28px, 0); }
+    25% { clip: rect(84px, 9999px, 61px, 0); }
+    30% { clip: rect(39px, 9999px, 94px, 0); }
+    35% { clip: rect(72px, 9999px, 19px, 0); }
+    40% { clip: rect(11px, 9999px, 55px, 0); }
+    45% { clip: rect(47px, 9999px, 82px, 0); }
+    50% { clip: rect(26px, 9999px, 68px, 0); }
+    55% { clip: rect(79px, 9999px, 37px, 0); }
+    60% { clip: rect(53px, 9999px, 91px, 0); }
+    65% { clip: rect(15px, 9999px, 42px, 0); }
+    70% { clip: rect(89px, 9999px, 76px, 0); }
+    75% { clip: rect(35px, 9999px, 14px, 0); }
+    80% { clip: rect(62px, 9999px, 49px, 0); }
+    85% { clip: rect(21px, 9999px, 96px, 0); }
+    90% { clip: rect(74px, 9999px, 31px, 0); }
+    95% { clip: rect(48px, 9999px, 66px, 0); }
+    100% { clip: rect(83px, 9999px, 22px, 0); }
+  }
+
+  /* Floating shapes */
+  .floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+    animation: float 15s ease-in-out infinite;
+  }
+
+  .shape-1 {
+    width: 300px;
+    height: 300px;
+    background: oklch(var(--p) / 0.3);
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .shape-2 {
+    width: 400px;
+    height: 400px;
+    background: oklch(var(--s) / 0.3);
+    top: 60%;
+    right: 10%;
+    animation-delay: -5s;
+  }
+
+  .shape-3 {
+    width: 250px;
+    height: 250px;
+    background: oklch(var(--a) / 0.3);
+    bottom: 20%;
+    left: 30%;
+    animation-delay: -10s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(30px, -30px) rotate(5deg); }
+    50% { transform: translate(-20px, 20px) rotate(-5deg); }
+    75% { transform: translate(10px, 10px) rotate(3deg); }
+  }
+</style>
