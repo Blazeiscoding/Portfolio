@@ -1,0 +1,130 @@
+/**
+ * Shared CSS Utilities
+ * Common patterns used across multiple components
+ */
+
+/* ======================
+   GLASSMORPHISM
+   ====================== */
+.glass-panel {
+  background: linear-gradient(
+    135deg,
+    oklch(var(--b2) / 0.8) 0%,
+    oklch(var(--b1) / 0.6) 100%
+  );
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid oklch(var(--bc) / 0.1);
+  box-shadow: 
+    0 4px 20px oklch(var(--bc) / 0.05),
+    inset 0 1px 0 oklch(var(--b1) / 0.5);
+}
+
+[data-theme="black"] .glass-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(25, 25, 25, 0.95) 0%,
+    rgba(35, 35, 35, 0.8) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ======================
+   SKELETON ANIMATIONS
+   ====================== */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-loader {
+  background: linear-gradient(
+    90deg,
+    oklch(var(--b3)) 0%,
+    oklch(var(--b2)) 50%,
+    oklch(var(--b3)) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ======================
+   FADE ANIMATIONS
+   ====================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fade-in {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* ======================
+   SCROLL ANIMATIONS
+   ====================== */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.stagger-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ======================
+   IMAGE TRANSITIONS
+   ====================== */
+.image-fade-in {
+  transition: opacity 0.5s ease-out;
+}
+
+/* ======================
+   HOVER EFFECTS
+   ====================== */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px -10px oklch(var(--bc) / 0.2);
+}
