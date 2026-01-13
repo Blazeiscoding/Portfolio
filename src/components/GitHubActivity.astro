@@ -83,6 +83,20 @@ const { username } = Astro.props;
       </div>
     </div>
   </div>
+  
+  <!-- Error State (hidden by default) -->
+  <div id="github-error" class="hidden glass-panel rounded-xl p-6 mt-4 text-center">
+    <Icon name="carbon:warning" class="w-8 h-8 mx-auto text-warning mb-2" aria-hidden="true" />
+    <p class="text-base-content/80 text-sm mb-3">Unable to load GitHub stats</p>
+    <button 
+      id="github-retry" 
+      class="btn btn-sm btn-outline btn-primary gap-2"
+      aria-label="Retry loading GitHub stats"
+    >
+      <Icon name="carbon:restart" class="w-4 h-4" aria-hidden="true" />
+      Retry
+    </button>
+  </div>
 </div>
 
 <script define:vars={{ username }}>
@@ -167,13 +181,25 @@ const { username } = Astro.props;
       checkAndAnimate();
     } catch (error) {
       console.error('Failed to fetch GitHub stats:', error);
-      ['repos', 'followers', 'following', 'stars'].forEach((stat, i) => {
-        revealStat(stat, i * 100);
-      });
-      if (reposEl) reposEl.textContent = '--';
-      if (followersEl) followersEl.textContent = '--';
-      if (followingEl) followingEl.textContent = '--';
-      if (starsEl) starsEl.textContent = '--';
+      
+      // Show error state
+      const errorEl = document.getElementById('github-error');
+      const statsEl = document.getElementById('github-stats');
+      if (errorEl && statsEl) {
+        statsEl.classList.add('hidden');
+        errorEl.classList.remove('hidden');
+      }
+      
+      // Setup retry button
+      const retryBtn = document.getElementById('github-retry');
+      if (retryBtn) {
+        retryBtn.addEventListener('click', () => {
+          hasFetched = false;
+          if (errorEl) errorEl.classList.add('hidden');
+          if (statsEl) statsEl.classList.remove('hidden');
+          fetchGitHubStats();
+        });
+      }
     }
   }
   
