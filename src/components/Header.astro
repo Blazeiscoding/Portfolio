@@ -131,20 +131,32 @@ const heroHighlights = [
   const counterEl = document.getElementById('download-counter');
   
   if (resumeBtn && counterEl) {
-    const getCount = () => parseInt(localStorage.getItem('resumeDownloads') || '0');
     const updateDisplay = (count: number) => {
       counterEl.textContent = count > 999 ? '999+' : count.toString();
     };
     
-    updateDisplay(getCount());
+    // Fetch initial count from API
+    fetch('/api/resume-counter')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          updateDisplay(data.count);
+        }
+      })
+      .catch(console.error);
     
     resumeBtn.addEventListener('click', () => {
-      const newCount = getCount() + 1;
-      localStorage.setItem('resumeDownloads', newCount.toString());
-      updateDisplay(newCount);
-      
-      counterEl.classList.add('animate-ping');
-      setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
+      // Increment via API
+      fetch('/api/resume-counter', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            updateDisplay(data.count);
+            counterEl.classList.add('animate-ping');
+            setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
+          }
+        })
+        .catch(console.error);
     });
   }
 
