@@ -1,13 +1,10 @@
 ---
 import { Icon } from "astro-icon/components";
-import BaseLayout from "./BaseLayout.astro";
-import Analytics from '@vercel/analytics/astro'
 const { title, icon } = Astro.props;
 ---
 
-<BaseLayout>
-  <Analytics />
-  <div class="collapse collapse-arrow ease-in-out duration-700 animate-on-scroll accordion-section">
+<!-- Analytics is already injected at root level in index.astro -->
+<div class="collapse collapse-arrow ease-in-out duration-700 animate-on-scroll accordion-section">
     <input 
       aria-label={`Toggle ${title} section`} 
       type="checkbox"
@@ -22,9 +19,8 @@ const { title, icon } = Astro.props;
     </div>
     <div class="collapse-content">
       <slot/>
-    </div>
   </div>
-</BaseLayout>
+</div>
 
 <style>
   .accordion-icon {
