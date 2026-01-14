@@ -1,5 +1,7 @@
-// Scroll progress bar
+// Scroll progress bar with RAF throttling for performance
 export function initScrollProgress(): void {
+  let ticking = false;
+  
   const updateProgress = () => {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -12,9 +14,15 @@ export function initScrollProgress(): void {
     // Parallax effect
     const parallaxSpeed = 0.3;
     document.body.style.setProperty('--parallax-y', `${winScroll * parallaxSpeed}px`);
+    ticking = false;
   };
   
-  window.addEventListener("scroll", updateProgress);
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  });
 }
 
 // Scroll reveal animations using IntersectionObserver

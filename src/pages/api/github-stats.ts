@@ -1,8 +1,4 @@
 import type { APIRoute } from 'astro';
-import * as dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-
 
 interface GitHubUser {
   login: string;
@@ -30,14 +26,11 @@ interface GitHubStatsResponse {
   error?: string;
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-dotenv.config({ path: resolve(__dirname, '../../../.env') });
-
 export const GET: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
   const username = url.searchParams.get('username') || 'Blazeiscoding';
-  const token = process.env.GITHUB_TOKEN || import.meta.env.GITHUB_TOKEN;
+  // Use import.meta.env - works in both dev and production (Vercel)
+  const token = import.meta.env.GITHUB_TOKEN;
   
   const headers: HeadersInit = {
     'Accept': 'application/vnd.github.v3+json',

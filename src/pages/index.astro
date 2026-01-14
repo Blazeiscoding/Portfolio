@@ -8,7 +8,6 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
-import { inject } from "@vercel/analytics";
 import criticalCss from "../styles/critical.css?raw";
 
 const siteUrl = "https://nikhilrathore.com";
@@ -32,58 +31,7 @@ const sameAsLinks = [
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         const theme = savedTheme || (prefersDark ? "black" : "lofi");
         document.documentElement.setAttribute("data-theme", theme);
-        
-        const isDark = theme === "black";
-        const checkbox = document.getElementById("theme-toggle");
-        if (checkbox) {
-          checkbox.checked = isDark;
-          checkbox.setAttribute("aria-checked", isDark.toString());
-        }
       })();
-    </script>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const themeToggle = document.querySelector('[data-toggle-theme]') as HTMLInputElement;
-        if (!themeToggle) return;
-        
-        const currentTheme = document.documentElement.getAttribute("data-theme");
-        themeToggle.checked = currentTheme === "black";
-        themeToggle.setAttribute("aria-checked", (currentTheme === "black").toString());
-        
-        const applyTheme = async (isDark: boolean, e?: Event) => {
-          const newTheme = isDark ? "black" : "lofi";
-          
-          if (document.startViewTransition) {
-            const toggle = document.getElementById('theme-toggle');
-            let x = window.innerWidth / 2;
-            let y = 0;
-            
-            if (toggle) {
-              const rect = toggle.getBoundingClientRect();
-              x = rect.left + rect.width / 2;
-              y = rect.top + rect.height / 2;
-            }
-            
-            document.documentElement.style.setProperty('--theme-x', `${x}px`);
-            document.documentElement.style.setProperty('--theme-y', `${y}px`);
-            
-            document.startViewTransition(() => {
-              localStorage.setItem("theme", newTheme);
-              document.documentElement.setAttribute("data-theme", newTheme);
-            });
-          } else {
-            localStorage.setItem("theme", newTheme);
-            document.documentElement.setAttribute("data-theme", newTheme);
-          }
-        };
-        
-        themeToggle.addEventListener('change', (e) => {
-          const target = e.target as HTMLInputElement;
-          const isDark = target.checked;
-          applyTheme(isDark);
-          target.setAttribute("aria-checked", isDark.toString());
-        });
-      });
     </script>
     <meta charset="utf-8" />
     <link rel="icon" type="image/png" href="/favicon.webp" />
