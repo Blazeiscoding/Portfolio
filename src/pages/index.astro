@@ -9,6 +9,7 @@ import Header from "../components/Header.astro";
 import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
 import { inject } from "@vercel/analytics";
+import criticalCss from "../styles/critical.css?raw";
 
 const siteUrl = "https://nikhilrathore.com";
 const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
@@ -131,6 +132,9 @@ const sameAsLinks = [
     <!-- Preload Critical Fonts -->
     <link rel="preload" as="font" type="font/woff2" href="/_astro/dm-sans-latin-wght-normal.woff2" crossorigin="anonymous" />
     <link rel="preload" as="font" type="font/woff2" href="/_astro/outfit-latin-wght-normal.woff2" crossorigin="anonymous" />
+    
+    <!-- Critical CSS - Inlined for LCP optimization -->
+    <style set:html={criticalCss} />
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json" set:html={JSON.stringify({

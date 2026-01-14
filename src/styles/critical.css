@@ -1,0 +1,96 @@
+/**
+ * Critical CSS - Inlined in <head> for LCP optimization
+ * Contains only above-the-fold styles required for initial render
+ */
+
+/* Base reset & layout */
+html {
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+}
+
+body {
+  font-family: "DM Sans Variable", sans-serif;
+  min-height: 100vh;
+  background-color: oklch(var(--b1));
+  overflow-x: hidden;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Prevent layout shift - reserve space for header */
+header {
+  min-height: 280px;
+}
+
+/* Scroll progress bar - visible immediately */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: oklch(var(--p));
+  z-index: 10000;
+  width: 0%;
+}
+
+/* Header glassmorphism - instant render */
+.fade-in-up {
+  animation: criticalFadeIn 0.6s ease-out forwards;
+}
+
+@keyframes criticalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Profile image container - prevent CLS */
+.profile-tilt-wrapper {
+  flex-shrink: 0;
+  width: 6rem;
+  border-radius: 9999px;
+  overflow: visible;
+  padding: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .profile-tilt-wrapper {
+    width: 7rem;
+  }
+}
+
+/* Theme toggle base */
+.toggle {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Divider - immediate visibility */
+.divider {
+  height: 1px;
+  opacity: 0.1;
+}
+
+/* Text sizing for hero */
+h1 {
+  font-family: "Outfit Variable", sans-serif;
+}
+
+/* Container layout */
+.container {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
