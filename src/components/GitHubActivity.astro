@@ -249,36 +249,13 @@ const { username } = Astro.props;
 </script>
 
 <style is:global>
-  /* Glass panel styling */
-  .glass-panel {
-    background: linear-gradient(
-      135deg,
-      oklch(var(--b2) / 0.8) 0%,
-      oklch(var(--b1) / 0.6) 100%
-    );
-    backdrop-filter: blur(12px) saturate(150%);
-    -webkit-backdrop-filter: blur(12px) saturate(150%);
-    border: 1px solid oklch(var(--bc) / 0.1);
-    box-shadow: 
-      0 4px 20px oklch(var(--bc) / 0.05),
-      inset 0 1px 0 oklch(var(--b1) / 0.5);
-  }
-  
+  /* GitHub Activity specific styles - glass-panel base is in shared.css */
   .contribution-graph {
     filter: grayscale(0);
   }
   
   [data-theme="black"] .contribution-graph {
     filter: invert(1) hue-rotate(180deg);
-  }
-  
-  [data-theme="black"] .glass-panel {
-    background: linear-gradient(
-      135deg,
-      rgba(25, 25, 25, 0.95) 0%,
-      rgba(35, 35, 35, 0.8) 100%
-    );
-    border-color: rgba(255, 255, 255, 0.1);
   }
   
   .stat-number {
@@ -309,28 +286,8 @@ const { username } = Astro.props;
     border-color: oklch(var(--p) / 0.4);
   }
   
-  /* Skeleton animation */
+  /* Skeleton graph shimmer - specific timing for this component */
   .skeleton-graph {
     animation: shimmer 2s ease-in-out infinite;
-  }
-  
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-  
-  @keyframes fade-in {
-    from { 
-      opacity: 0; 
-      transform: translateY(10px);
-    }
-    to { 
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-fade-in {
-    animation: fade-in 0.4s ease-out forwards;
   }
 </style>

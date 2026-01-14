@@ -35,7 +35,7 @@ header {
   width: 0%;
 }
 
-/* Header glassmorphism - instant render */
+/* Header fade-in - uses unique keyframe to avoid conflict with shared.css */
 .fade-in-up {
   animation: criticalFadeIn 0.6s ease-out forwards;
 }

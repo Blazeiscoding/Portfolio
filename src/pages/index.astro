@@ -6,17 +6,25 @@ import { ViewTransitions } from "astro:transitions";
 import Container from "../components/Container.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import { Icon } from "astro-icon/components";
 import * as about from "../pages/about/about.md";
 import criticalCss from "../styles/critical.css?raw";
+
+// TypeScript interface for contact markdown files
+interface ContactFile {
+  frontmatter: {
+    title: string;
+    url: string;
+    icon: string;
+  };
+}
 
 const siteUrl = "https://nikhilrathore.com";
 const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
 const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. Full-Stack Developer skilled in building scalable web applications using React, Next.js, Node.js, and modern UI frameworks. Experienced in developing RESTful APIs, managing databases with PostgreSQL and MongoDB, and deploying production-ready apps.`;
 const imageUrl = `${siteUrl}/snap_laptop.webp`;
 
-const contactLinksGlob = import.meta.glob("../pages/contact/*.md", { eager: true });
-const contactLinks = Object.values(contactLinksGlob) as any[];
+const contactLinksGlob = import.meta.glob<ContactFile>("../pages/contact/*.md", { eager: true });
+const contactLinks = Object.values(contactLinksGlob);
 const sameAsLinks = [
   "https://github.com/Blazeiscoding",
   ...contactLinks.map(item => item.frontmatter.url).filter(Boolean)
@@ -285,47 +293,7 @@ const sameAsLinks = [
       transition: none !important;
     }
   }
-  
-  /* Smooth fade-in animation */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .fade-in-up {
-    animation: fadeInUp 0.6s ease-out forwards;
-  }
-  
-  /* Intersection Observer will add this class */
-  .animate-on-scroll {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  }
-  
-  .animate-on-scroll.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  /* Staggered Animation Items */
-  .stagger-item {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-  }
-  
-  .stagger-item.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
+  /* Container responsive layout */
   @media (min-width: 768px) {
     .container {
       display: flex;
