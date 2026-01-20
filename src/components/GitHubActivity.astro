@@ -32,6 +32,8 @@ const { username } = Astro.props;
       class="w-full h-auto contribution-graph opacity-0 transition-opacity duration-500"
       loading="lazy"
       decoding="async"
+      width="722"
+      height="112"
       id="contribution-img"
       onload="this.classList.remove('opacity-0'); document.getElementById('graph-skeleton')?.classList.add('hidden');"
     />

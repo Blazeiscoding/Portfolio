@@ -79,6 +79,8 @@ const sameAsLinks = [
     <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://api.github.com" crossorigin />
     <link rel="dns-prefetch" href="https://api.github.com" />
+    <link rel="preconnect" href="https://ghchart.rshah.org" crossorigin />
+    <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     
@@ -136,29 +138,47 @@ const sameAsLinks = [
       import { initScrollProgress, initScrollAnimations, initSmoothScroll } from '../scripts/scroll';
       import { initAnimatedFavicon, initConsoleEasterEgg } from '../scripts/fun';
       
-      // Initialize scroll progress immediately
+      // Initialize scroll progress immediately (critical for UX)
       initScrollProgress();
       
-      // Initialize other features after DOM is ready
+      // Initialize critical features after DOM is ready
       document.addEventListener("DOMContentLoaded", () => {
         initThemeToggle();
         initScrollAnimations();
         initSmoothScroll();
-        initAnimatedFavicon();
-        initConsoleEasterEgg();
+        
+        // Defer non-critical scripts to idle time
+        const deferToIdle = (fn: () => void) => {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(fn, { timeout: 2000 });
+          } else {
+            setTimeout(fn, 200);
+          }
+        };
+        
+        deferToIdle(initAnimatedFavicon);
+        deferToIdle(initConsoleEasterEgg);
       });
     </script>
     
-    <!-- Vercel Analytics -->
+    <!-- Vercel Analytics - deferred to idle -->
     <script>
       import { inject } from '@vercel/analytics';
-      inject();
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => inject(), { timeout: 3000 });
+      } else {
+        setTimeout(() => inject(), 100);
+      }
     </script>
     
-    <!-- Vercel Speed Insights -->
+    <!-- Vercel Speed Insights - deferred to idle -->
     <script>
       import { injectSpeedInsights } from '@vercel/speed-insights';
-      injectSpeedInsights();
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => injectSpeedInsights(), { timeout: 3000 });
+      } else {
+        setTimeout(() => injectSpeedInsights(), 100);
+      }
     </script>
     <Footer class="flex justify-center items-center py-4" />
   </body>
@@ -232,7 +252,6 @@ const sameAsLinks = [
     opacity: 0;
     mix-blend-mode: overlay;
     transform: translateZ(0);
-    will-change: opacity;
     animation: noiseAppear 0.3s ease-out 0.8s forwards;
   }
   

@@ -128,3 +128,18 @@
   transform: translateY(-4px);
   box-shadow: 0 10px 30px -10px oklch(var(--bc) / 0.2);
 }
+
+/* ======================
+   CONTENT VISIBILITY
+   ====================== */
+/* Lazy rendering for below-the-fold content */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+/* Card-specific lazy rendering */
+.card-lazy-render {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 350px;
+}

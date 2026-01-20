@@ -18,7 +18,7 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
   Astro.props;
 ---
 
-<div class="card-wrapper w-full md:w-112 lg:w-128 my-4">
+<div class="card-wrapper card-lazy-render w-full md:w-112 lg:w-128 my-4">
   <div class="card card-compact card-bordered glass-card w-full transition-all duration-500 group overflow-hidden rounded-2xl stagger-item">
     
     {image && (
