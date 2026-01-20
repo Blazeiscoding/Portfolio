@@ -35,10 +35,10 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
           <img
             src={image}
             alt={`${title} project screenshot`}
-            class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-0 image-fade-in"
+            class="w-full aspect-video object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-0 image-fade-in"
             loading="lazy"
             width="512"
-            height="208"
+            height="288"
             decoding="async"
             onload="this.classList.remove('opacity-0'); this.previousElementSibling?.classList.add('hidden');"
           />

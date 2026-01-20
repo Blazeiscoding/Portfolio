@@ -87,10 +87,6 @@ const sameAsLinks = [
     <!-- Preload LCP Hero Image -->
     <link rel="preload" as="image" href="/profile.webp" type="image/webp" fetchpriority="high" />
     
-    <!-- Preload Critical Fonts -->
-    <link rel="preload" as="font" type="font/woff2" href="/_astro/dm-sans-latin-wght-normal.woff2" crossorigin="anonymous" />
-    <link rel="preload" as="font" type="font/woff2" href="/_astro/outfit-latin-wght-normal.woff2" crossorigin="anonymous" />
-    
     <!-- Critical CSS - Inlined for LCP optimization -->
     <style set:html={criticalCss} />
     

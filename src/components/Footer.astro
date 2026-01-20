@@ -17,9 +17,29 @@ const contacts = Object.values(contactGlob);
 const getYear = () => new Date().getFullYear().toString();
 ---
 
-<footer class="flex flex-col justify-center items-center bg-transparent py-8 gap-6 relative" id="contact">
+<footer class="flex flex-col justify-center items-center bg-transparent py-10 gap-6 relative" id="contact">
+  <!-- Animated gradient top border -->
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[1px] bg-gradient-to-r from-transparent via-base-content/10 to-transparent"></div>
-  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent blur-sm"></div>
+  <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent blur-[1px] animate-pulse"></div>
+  
+  <!-- Back to top button -->
+  <button 
+    id="back-to-top"
+    class="group flex items-center gap-2 px-4 py-2 rounded-full border border-base-content/10 bg-base-100/50 backdrop-blur-sm hover:border-primary/50 hover:bg-primary/10 transition-all duration-300 mb-2 cursor-pointer"
+    aria-label="Back to top"
+  >
+    <Icon name="carbon:arrow-up" class="w-4 h-4 group-hover:-translate-y-1 transition-transform duration-300" aria-hidden="true" />
+    <span class="text-sm text-base-content/70 group-hover:text-primary transition-colors">Back to top</span>
+  </button>
+  
+  <script>
+    document.getElementById('back-to-top')?.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  </script>
   
   <div class="text-center mb-2">
     <p class="text-sm text-base-content/60">Feel free to reach out!</p>
@@ -44,7 +64,7 @@ const getYear = () => new Date().getFullYear().toString();
     ))}
   </div>
   
-  <div class="flex items-center gap-2 text-sm text-base-content/60 font-light mt-2">
+  <div class="flex items-center gap-2 text-sm text-base-content/60 font-light mt-4">
     <p>&copy; {getYear()} Nikhil Rathore</p>
     <span class="w-1 h-1 rounded-full bg-base-content/30"></span>
     <div class="flex items-center gap-1">

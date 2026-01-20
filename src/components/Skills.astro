@@ -8,23 +8,29 @@ interface Skill {
 }
 
 const skills: Skill[] = [
-  { name: "TypeScript", icon: "carbon:script", category: "Language" },
-  { name: "JavaScript", icon: "carbon:code", category: "Language" },
+  // Languages - using branded icons
+  { name: "TypeScript", icon: "simple-icons:typescript", category: "Language" },
+  { name: "JavaScript", icon: "simple-icons:javascript", category: "Language" },
   
-  { name: "React", icon: "carbon:application", category: "Frontend" },
-  { name: "Next.js", icon: "carbon:arrow-right", category: "Frontend" },
-  { name: "Tailwind CSS", icon: "carbon:code", category: "Frontend" },
-  { name: "ShadCN", icon: "carbon:layers", category: "Frontend" },
+  // Frontend
+  { name: "React", icon: "simple-icons:react", category: "Frontend" },
+  { name: "Next.js", icon: "simple-icons:nextdotjs", category: "Frontend" },
+  { name: "Tailwind CSS", icon: "simple-icons:tailwindcss", category: "Frontend" },
+  { name: "Astro", icon: "simple-icons:astro", category: "Frontend" },
   
-  { name: "Node.js", icon: "carbon:application", category: "Backend" },
-  { name: "Express.js", icon: "carbon:application", category: "Backend" },
+  // Backend
+  { name: "Node.js", icon: "simple-icons:nodedotjs", category: "Backend" },
+  { name: "Express.js", icon: "simple-icons:express", category: "Backend" },
   { name: "RESTful APIs", icon: "carbon:api", category: "Backend" },
   
-  { name: "PostgreSQL", icon: "carbon:data-base", category: "Database" },
-  { name: "MongoDB", icon: "carbon:data-base", category: "Database" },
+  // Database
+  { name: "PostgreSQL", icon: "simple-icons:postgresql", category: "Database" },
+  { name: "MongoDB", icon: "simple-icons:mongodb", category: "Database" },
   
-  { name: "Vercel", icon: "carbon:cloud", category: "Tools" },
-  { name: "Git", icon: "carbon:logo-github", category: "Tools" },
+  // Tools
+  { name: "Vercel", icon: "simple-icons:vercel", category: "Tools" },
+  { name: "Git", icon: "simple-icons:git", category: "Tools" },
+  { name: "Docker", icon: "simple-icons:docker", category: "Tools" },
 ];
 
 const categories = ["Language", "Frontend", "Backend", "Database", "Tools"] as const;

@@ -1,6 +1,13 @@
 ---
 import { Icon } from "astro-icon/components";
-const { title, icon } = Astro.props;
+
+interface Props {
+  title: string;
+  icon: string;
+  defaultOpen?: boolean;
+}
+
+const { title, icon, defaultOpen = false } = Astro.props;
 ---
 
 <!-- Analytics is already injected at root level in index.astro -->
@@ -9,6 +16,7 @@ const { title, icon } = Astro.props;
       aria-label={`Toggle ${title} section`} 
       type="checkbox"
       class="accordion-checkbox"
+      checked={defaultOpen}
     />
     <div class="collapse-title font-extrabold tracking-tight md:text-2xl">
       <div class="flex items-center">

@@ -9,7 +9,18 @@ import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   site: "https://nikhilrathore.com",
-  integrations: [tailwind(), icon(), sitemap(), compress()],
+  integrations: [
+    tailwind(), 
+    icon({
+      include: {
+        "carbon": ["*"],
+        "mdi": ["*"],
+        "simple-icons": ["*"] 
+      }
+    }), 
+    sitemap(), 
+    compress()
+  ],
   output: "server",
   adapter: vercel()
 });
