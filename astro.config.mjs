@@ -26,5 +26,11 @@ export default defineConfig({
   // Default: run anywhere (VM/Docker). For Vercel builds set DEPLOY_TARGET=vercel.
   adapter: process.env.DEPLOY_TARGET === "vercel"
     ? vercel()
-    : node({ mode: "standalone" })
+    : node({ mode: "standalone" }),
+  // Allow Caddy/remote access to astro preview on your domain
+  vite: {
+    preview: {
+      allowedHosts: ["nikhilrathore.com", "www.nikhilrathore.com"]
+    }
+  }
 });
