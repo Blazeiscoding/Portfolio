@@ -11,7 +11,7 @@ RUN npm config set registry https://registry.npmjs.org/ && \
 
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci --prefer-offline --no-audit
+    npm install --prefer-offline --no-audit
 
 
 FROM node:20-alpine AS build
