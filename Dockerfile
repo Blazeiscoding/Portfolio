@@ -3,9 +3,15 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
 
+# Set npm registry and timeout for better reliability
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000
+
 COPY package.json package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+    npm ci --prefer-offline --no-audit
 
 
 FROM node:20-alpine AS build
