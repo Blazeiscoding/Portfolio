@@ -1,10 +1,11 @@
-# syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1.4
 
 FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 
 FROM node:20-alpine AS build
