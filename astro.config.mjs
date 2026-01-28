@@ -5,6 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig } from 'astro/config';
 
 import vercel from "@astrojs/vercel";
+import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,5 +23,8 @@ export default defineConfig({
     compress()
   ],
   output: "server",
-  adapter: vercel()
+  // Default: run anywhere (VM/Docker). For Vercel builds set DEPLOY_TARGET=vercel.
+  adapter: process.env.DEPLOY_TARGET === "vercel"
+    ? vercel()
+    : node({ mode: "standalone" })
 });

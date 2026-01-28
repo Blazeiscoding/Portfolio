@@ -3,9 +3,31 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:4321"
+    # Internal only (Caddy is the public entrypoint)
+    expose:
+      - "4321"
     env_file:
       - .env
     restart: unless-stopped
     init: true
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CADDY_DOMAIN=nikhilrathore.com
+      # Email for Let's Encrypt (recommended)
+      - ACME_EMAIL=nikhilrathore52297@gmail.com
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - portfolio
+
+volumes:
+  caddy_data:
+  caddy_config:

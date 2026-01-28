@@ -1,0 +1,19 @@
+{
+  email {$ACME_EMAIL}
+}
+
+www.{$CADDY_DOMAIN} {
+  redir https://{$CADDY_DOMAIN}{uri} permanent
+}
+
+{$CADDY_DOMAIN} {
+  encode zstd gzip
+  reverse_proxy portfolio:4321
+}
+
+# If you just want to access by VM IP without a domain,
+# comment the block above and uncomment this one:
+# :80 {
+#   reverse_proxy portfolio:4321
+# }
+
