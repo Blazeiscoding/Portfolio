@@ -2,13 +2,25 @@
   email {$ACME_EMAIL}
 }
 
-www.{$CADDY_DOMAIN} {
-  redir https://{$CADDY_DOMAIN}{uri} permanent
-}
-
-{$CADDY_DOMAIN} {
+# Single block for both domains so HTTP-01 ACME challenge works on www (no redirect before challenge)
+{$CADDY_DOMAIN}, www.{$CADDY_DOMAIN} {
   encode zstd gzip
-  reverse_proxy portfolio:4321
+
+  # Redirect www to non-www, but NOT for ACME challenge path (so Let's Encrypt can validate)
+  @www host www.{$CADDY_DOMAIN}
+  @acme path /.well-known/acme-challenge/*
+  handle @www not @acme {
+    redir https://{$CADDY_DOMAIN}{uri} permanent
+  }
+
+  # Don't proxy ACME challenge – let Caddy serve it so cert issuance works
+  handle not path /.well-known/acme-challenge/* {
+    reverse_proxy portfolio:4321
+  }
+
+  tls {
+    protocols tls1.2 tls1.3
+  }
 }
 
 # If you just want to access by VM IP without a domain,
