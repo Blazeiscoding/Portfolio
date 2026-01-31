@@ -7,9 +7,7 @@
   encode zstd gzip
 
   # Redirect www to non-www, but NOT for ACME challenge path (so Let's Encrypt can validate)
-  @www host www.{$CADDY_DOMAIN}
-  @acme path /.well-known/acme-challenge/*
-  handle @www not @acme {
+  handle host www.{$CADDY_DOMAIN} not path /.well-known/acme-challenge/* {
     redir https://{$CADDY_DOMAIN}{uri} permanent
   }
 
