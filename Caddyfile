@@ -2,24 +2,13 @@
   email {$ACME_EMAIL}
 }
 
-# Single block for both domains so HTTP-01 ACME challenge works on www (no redirect before challenge)
-{$CADDY_DOMAIN}, www.{$CADDY_DOMAIN} {
+www.{$CADDY_DOMAIN} {
+  redir https://{$CADDY_DOMAIN}{uri} permanent
+}
+
+{$CADDY_DOMAIN} {
   encode zstd gzip
-
-  # Redirect www to non-www, but NOT for ACME challenge path (so Let's Encrypt can validate)
-  @www_redirect {
-    host www.{$CADDY_DOMAIN}
-    not path /.well-known/acme-challenge/*
-  }
-  handle @www_redirect {
-    redir https://{$CADDY_DOMAIN}{uri} permanent
-  }
-
-  # Don't proxy ACME challenge – let Caddy serve it so cert issuance works
-  handle not path /.well-known/acme-challenge/* {
-    reverse_proxy portfolio:4321
-  }
-
+  reverse_proxy portfolio:4321
   tls {
     protocols tls1.2 tls1.3
   }
