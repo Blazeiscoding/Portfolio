@@ -1,5 +1,20 @@
 import type { APIRoute } from 'astro';
-import { kv } from '@vercel/kv';
+import { promises as fs } from 'fs';
+import path from 'path';
+
+// Store counter in a JSON file in the project root
+const DATA_DIR = path.join(process.cwd(), 'data');
+const COUNTER_FILE = path.join(DATA_DIR, 'portfolio-counter.json');
+
+interface CounterData {
+  [key: string]: number;
+}
+
+interface CounterResponse {
+  count: number;
+  success: boolean;
+  error?: string;
+}
 
 // Generate monthly key (e.g., portfolio_visits_2026_02)
 function getMonthlyKey(): string {
@@ -9,36 +24,47 @@ function getMonthlyKey(): string {
   return `portfolio_visits_${year}_${month}`;
 }
 
-interface CounterResponse {
-  count: number;
-  success: boolean;
-  error?: string;
+// Ensure data directory exists
+async function ensureDataDir(): Promise<void> {
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+  } catch {
+    // Directory already exists
+  }
 }
 
-// Fallback in-memory counter (for local dev without KV)
-let fallbackCount = 0;
+// Read counter data from file
+async function readCounterData(): Promise<CounterData> {
+  try {
+    await ensureDataDir();
+    const data = await fs.readFile(COUNTER_FILE, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    // File doesn't exist or is invalid, return empty object
+    return {};
+  }
+}
 
-// Helper to get count (with fallback)
+// Write counter data to file
+async function writeCounterData(data: CounterData): Promise<void> {
+  await ensureDataDir();
+  await fs.writeFile(COUNTER_FILE, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+// Helper to get count
 async function getCount(): Promise<number> {
-  try {
-    const count = await kv.get<number>(getMonthlyKey());
-    return count ?? 0;
-  } catch {
-    // Fallback for local dev or if KV is not configured
-    return fallbackCount;
-  }
+  const data = await readCounterData();
+  const key = getMonthlyKey();
+  return data[key] ?? 0;
 }
 
-// Helper to increment count (with fallback)
+// Helper to increment count
 async function incrementCount(): Promise<number> {
-  try {
-    const newCount = await kv.incr(getMonthlyKey());
-    return newCount;
-  } catch {
-    // Fallback for local dev or if KV is not configured
-    fallbackCount += 1;
-    return fallbackCount;
-  }
+  const data = await readCounterData();
+  const key = getMonthlyKey();
+  data[key] = (data[key] ?? 0) + 1;
+  await writeCounterData(data);
+  return data[key];
 }
 
 // GET - Retrieve current count
