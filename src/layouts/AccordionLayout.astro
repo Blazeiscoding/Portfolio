@@ -19,9 +19,10 @@ const { title, icon, defaultOpen = false } = Astro.props;
       checked={defaultOpen}
     />
     <div class="collapse-title font-extrabold tracking-tight md:text-2xl">
-      <div class="flex items-center">
+      <div class="flex items-center gap-2">
         <Icon name={icon} class="accordion-icon w-8 h-8 mr-4" aria-hidden="true" />
         <h2>{title}</h2>
+        <slot name="badge" />
       </div>
     </div>
     <div class="collapse-content">

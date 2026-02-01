@@ -82,7 +82,7 @@ const heroHighlights = [
           </span>
         ))}
       </div>
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-wrap gap-3 items-center">
         <a
           href={resumeUrl}
           target="_blank"
@@ -93,14 +93,17 @@ const heroHighlights = [
         >
           <Icon name="carbon:document-pdf" class="w-4 h-4 group-hover:animate-bounce" aria-hidden="true" />
           Resume
+        </a>
+        <div class="flex items-center gap-2 ml-auto text-sm text-base-content/70">
+          <Icon name="carbon:view" class="w-4 h-4" aria-hidden="true" />
+          <span>Visitor count:</span>
           <span 
-            id="download-counter" 
-            class="badge badge-xs badge-primary absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-[10px] font-bold"
-            title="Total downloads"
+            id="portfolio-counter" 
+            class="font-bold text-primary"
           >
             0
           </span>
-        </a>
+        </div>
       </div>
     </section>
     </div>

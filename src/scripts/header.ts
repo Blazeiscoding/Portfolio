@@ -1,7 +1,7 @@
 /**
  * Header component scripts
  * - Typewriter effect
- * - Resume download counter
+ * - Portfolio visit counter
  * - Profile tilt interaction
  */
 
@@ -24,18 +24,18 @@ export function initTypewriter(): void {
   typewriter.style.animation = `typing 3.5s steps(${length}, end) forwards`;
 }
 
-export function initResumeCounter(): void {
-  const resumeBtn = document.getElementById('resume-btn');
-  const counterEl = document.getElementById('download-counter');
+export function initPortfolioCounter(): void {
+  const projectsSection = document.getElementById('projects');
+  const counterEl = document.getElementById('portfolio-counter');
   
-  if (!resumeBtn || !counterEl) return;
+  if (!projectsSection || !counterEl) return;
   
   const updateDisplay = (count: number): void => {
     counterEl.textContent = count > 999 ? '999+' : count.toString();
   };
   
   // Fetch initial count from API
-  fetch('/api/resume-counter')
+  fetch('/api/portfolio-counter')
     .then(res => res.json())
     .then(data => {
       if (data.success) {
@@ -44,19 +44,34 @@ export function initResumeCounter(): void {
     })
     .catch(console.error);
   
-  resumeBtn.addEventListener('click', () => {
-    // Increment via API
-    fetch('/api/resume-counter', { method: 'POST' })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          updateDisplay(data.count);
-          counterEl.classList.add('animate-ping');
-          setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
+  // Track when user scrolls to portfolio section (only once per session)
+  let hasTracked = sessionStorage.getItem('portfolio_visit_tracked') === 'true';
+  
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasTracked) {
+          hasTracked = true;
+          sessionStorage.setItem('portfolio_visit_tracked', 'true');
+          
+          // Increment via API
+          fetch('/api/portfolio-counter', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+              if (data.success) {
+                updateDisplay(data.count);
+                counterEl.classList.add('animate-ping');
+                setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
+              }
+            })
+            .catch(console.error);
         }
-      })
-      .catch(console.error);
-  });
+      });
+    },
+    { threshold: 0.3 } // Trigger when 30% of the section is visible
+  );
+  
+  observer.observe(projectsSection);
 }
 
 export function initProfileTilt(): void {
@@ -90,6 +105,6 @@ export function initProfileTilt(): void {
 
 export function initHeader(): void {
   initTypewriter();
-  initResumeCounter();
+  initPortfolioCounter();
   initProfileTilt();
 }
