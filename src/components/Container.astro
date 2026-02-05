@@ -70,14 +70,8 @@ const sortedStudies = sortByDate(studies);
 ---
 
 <div class="join join-vertical gap-4">
-  <section id="skills" class="scroll-mt-32">
-    <AccordionLayout title={"Skills"} icon={"carbon:skill-level"} defaultOpen={true}>
-      <Skills />
-    </AccordionLayout>
-  </section>
-
   <section id="projects" class="scroll-mt-32">
-    <AccordionLayout title={"Projects"} icon={"carbon:tools"}>
+    <AccordionLayout title={"Projects"} icon={"carbon:tools"} defaultOpen={true}>
       {
         sortedProjects.map((item) => {
           return (
@@ -94,6 +88,12 @@ const sortedStudies = sortByDate(studies);
           );
         })
       }
+    </AccordionLayout>
+  </section>
+
+  <section id="skills" class="scroll-mt-32">
+    <AccordionLayout title={"Skills"} icon={"carbon:skill-level"}>
+      <Skills />
     </AccordionLayout>
   </section>
 
