@@ -31,12 +31,24 @@ export function initTypewriter(): void {
 }
 
 const COUNTER_SESSION_KEY = 'portfolio_visit_tracked';
-const COUNTER_ENDPOINT_BASE = 'https://api.countapi.xyz';
-const COUNTER_NAMESPACE = 'nikhilrathore_com';
-const COUNTER_KEY = 'portfolio_visits';
+const COUNTER_ENDPOINT = '/api/visitors';
 
 function buildCounterUrl(action: 'get' | 'hit'): string {
-  return `${COUNTER_ENDPOINT_BASE}/${action}/${COUNTER_NAMESPACE}/${COUNTER_KEY}`;
+  const mode = action === 'hit' ? 'hit' : 'get';
+  return `${COUNTER_ENDPOINT}?mode=${mode}`;
+}
+
+async function requestCounter(action: 'get' | 'hit'): Promise<number | null> {
+  const method = action === 'hit' ? 'POST' : 'GET';
+  const response = await fetch(buildCounterUrl(action), {
+    method,
+    headers: { 'Accept': 'application/json' }
+  });
+  if (!response.ok) return null;
+  const data = await response.json();
+  const value = Number(data?.value);
+  if (!Number.isFinite(value) || value < 0) return null;
+  return value;
 }
 
 export function initPortfolioCounter(): void {
@@ -51,11 +63,8 @@ export function initPortfolioCounter(): void {
 
   const fetchCurrentCount = async (): Promise<void> => {
     try {
-      const response = await fetch(buildCounterUrl('get'));
-      if (!response.ok) return;
-      const data = await response.json();
-      const value = Number(data?.value);
-      if (Number.isFinite(value) && value >= 0) {
+      const value = await requestCounter('get');
+      if (value !== null) {
         updateDisplay(value);
       }
     } catch {
@@ -65,11 +74,8 @@ export function initPortfolioCounter(): void {
 
   const incrementCount = async (): Promise<void> => {
     try {
-      const response = await fetch(buildCounterUrl('hit'));
-      if (!response.ok) return;
-      const data = await response.json();
-      const value = Number(data?.value);
-      if (Number.isFinite(value) && value >= 0) {
+      const value = await requestCounter('hit');
+      if (value !== null) {
         updateDisplay(value);
       }
     } catch {
