@@ -17,7 +17,8 @@ Create a `.env` file on the VM (do **not** commit it). For example:
 
 ```bash
 GITHUB_TOKEN=your_token_here
-REDIS_URL=your_redis_url_here
+UPSTASH_REDIS_REST_URL=https://your-db.upstash.io
+UPSTASH_REDIS_REST_TOKEN=your_upstash_rest_token
 ```
 
 The `.dockerignore` ensures `.env` is not baked into images.

@@ -1,19 +1,13 @@
-import { createClient } from 'redis';
-
 const COUNTER_KEY = 'portfolio_visits';
-const CONNECT_TIMEOUT_MS = 1200;
-const COMMAND_TIMEOUT_MS = 1200;
+const REQUEST_TIMEOUT_MS = 1500;
 let fallbackCount = 0;
-let client = null;
-let connectPromise = null;
-let lastRedisError = null;
 
 function normalizeCount(value) {
   const parsed = Number(value ?? 0);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
 }
 
-function sanitizeRedisUrl(value) {
+function sanitizeEnvValue(value) {
   const trimmed = String(value ?? '').trim();
   if (
     (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
@@ -24,83 +18,39 @@ function sanitizeRedisUrl(value) {
   return trimmed;
 }
 
-function buildRedisUrlCandidates(redisUrl) {
-  if (!redisUrl.startsWith('redis://')) {
-    return [redisUrl];
-  }
-  // Managed Redis commonly requires TLS in serverless environments.
-  return [redisUrl.replace('redis://', 'rediss://'), redisUrl];
+function getUpstashConfig() {
+  const url = sanitizeEnvValue(process.env.UPSTASH_REDIS_REST_URL).replace(/\/+$/, '');
+  const token = sanitizeEnvValue(process.env.UPSTASH_REDIS_REST_TOKEN);
+  if (!url || !token) return null;
+  return { url, token };
 }
 
-function withTimeout(promise, timeoutMs, message) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => {
-      setTimeout(() => reject(new Error(message)), timeoutMs);
-    })
-  ]);
-}
+async function callUpstash(config, commandPath) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
-async function resetRedisClient() {
-  const existing = client;
-  client = null;
-  connectPromise = null;
-
-  if (!existing) return;
   try {
-    if (existing.isOpen) {
-      await existing.quit();
-    }
-  } catch {
-    // Ignore cleanup failures.
-  }
-}
-
-async function connectWithUrl(redisUrl) {
-  const nextClient = createClient({
-    url: redisUrl,
-    socket: {
-      connectTimeout: CONNECT_TIMEOUT_MS,
-      reconnectStrategy: () => false
-    }
-  });
-  nextClient.on('error', () => {
-    // Requests already handle failures by falling back.
-  });
-  await withTimeout(
-    nextClient.connect(),
-    CONNECT_TIMEOUT_MS + 300,
-    'Redis connect timeout'
-  );
-  return nextClient;
-}
-
-async function getRedisClient() {
-  const redisUrl = sanitizeRedisUrl(process.env.REDIS_URL);
-  if (!redisUrl) return null;
-
-  if (!client) {
-    const candidates = buildRedisUrlCandidates(redisUrl);
-    connectPromise = (async () => {
-      for (const candidate of candidates) {
-        try {
-          const connected = await connectWithUrl(candidate);
-          client = connected;
-          lastRedisError = null;
-          return connected;
-        } catch (error) {
-          lastRedisError = error instanceof Error ? error.message : 'Redis connection failed';
-        }
-      }
-      throw new Error(lastRedisError || 'Redis connection failed');
-    })().catch(async (error) => {
-      await resetRedisClient();
-      throw error;
+    const response = await fetch(`${config.url}/${commandPath}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${config.token}`
+      },
+      signal: controller.signal
     });
-  }
 
-  await connectPromise;
-  return client;
+    if (!response.ok) {
+      throw new Error(`Upstash HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    if (payload?.error) {
+      throw new Error(String(payload.error));
+    }
+
+    return payload?.result;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export default async function handler(req, res) {
@@ -115,28 +65,27 @@ export default async function handler(req, res) {
   const debug = debugParam === '1';
 
   try {
-    const redis = await getRedisClient();
-    if (!redis) {
+    const upstash = getUpstashConfig();
+    if (!upstash) {
       if (mode === 'hit') fallbackCount += 1;
       res.setHeader('Cache-Control', 'no-store, max-age=0');
       res.setHeader('X-Counter-Source', 'fallback');
-      const payload = { value: fallbackCount, warning: 'REDIS_URL is not set' };
-      if (debug) payload.details = 'Set REDIS_URL in Vercel project env vars';
+      const payload = { value: fallbackCount, warning: 'Upstash env vars are not set' };
+      if (debug) payload.details = 'Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN in Vercel env vars';
       return res.status(200).json(payload);
     }
 
     const value = mode === 'hit'
-      ? await withTimeout(redis.incr(COUNTER_KEY), COMMAND_TIMEOUT_MS, 'Redis incr timeout')
-      : await withTimeout(redis.get(COUNTER_KEY), COMMAND_TIMEOUT_MS, 'Redis get timeout');
+      ? await callUpstash(upstash, `incr/${COUNTER_KEY}`)
+      : await callUpstash(upstash, `get/${COUNTER_KEY}`);
 
     const normalized = normalizeCount(value);
     fallbackCount = normalized;
 
     res.setHeader('Cache-Control', 'no-store, max-age=0');
-    res.setHeader('X-Counter-Source', 'redis');
+    res.setHeader('X-Counter-Source', 'upstash');
     return res.status(200).json({ value: normalized });
   } catch (error) {
-    await resetRedisClient();
     if (mode === 'hit') fallbackCount += 1;
     res.setHeader('Cache-Control', 'no-store, max-age=0');
     res.setHeader('X-Counter-Source', 'fallback');
