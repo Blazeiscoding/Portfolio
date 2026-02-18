@@ -144,6 +144,36 @@ const { username } = Astro.props;
   let statsData = null;
   let hasAnimated = false;
   let hasFetched = false;
+
+  async function fetchAllRepos() {
+    const allRepos = [];
+    let page = 1;
+    const perPage = 100;
+
+    while (page <= 10) {
+      const reposRes = await fetch(
+        `https://api.github.com/users/${username}/repos?per_page=${perPage}&page=${page}&type=owner&sort=updated`,
+        {
+          headers: {
+            Accept: 'application/vnd.github+json',
+          },
+        }
+      );
+
+      if (!reposRes.ok) {
+        throw new Error(`GitHub repos request failed with HTTP ${reposRes.status}`);
+      }
+
+      const pageRepos = await reposRes.json();
+      if (!Array.isArray(pageRepos)) break;
+
+      allRepos.push(...pageRepos);
+      if (pageRepos.length < perPage) break;
+      page += 1;
+    }
+
+    return allRepos;
+  }
   
   async function fetchGitHubStats() {
     if (hasFetched) return;
@@ -155,13 +185,26 @@ const { username } = Astro.props;
     const starsEl = document.getElementById('stars-count');
     
     try {
-      const res = await fetch(`/api/github-stats?username=${username}`);
-      
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}: Failed to fetch GitHub stats`);
+      const userRes = await fetch(`https://api.github.com/users/${username}`, {
+        headers: {
+          Accept: 'application/vnd.github+json',
+        },
+      });
+
+      if (!userRes.ok) {
+        throw new Error(`GitHub user request failed with HTTP ${userRes.status}`);
       }
-      
-      statsData = await res.json();
+
+      const user = await userRes.json();
+      const repos = await fetchAllRepos();
+      const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+
+      statsData = {
+        repos: Number(user.public_repos) || repos.length || 0,
+        followers: Number(user.followers) || 0,
+        following: Number(user.following) || 0,
+        stars: totalStars,
+      };
       
       revealStat('repos', 100);
       revealStat('followers', 200);
@@ -172,13 +215,6 @@ const { username } = Astro.props;
       if (followersEl) followersEl.textContent = '0';
       if (followingEl) followingEl.textContent = '0';
       if (starsEl) starsEl.textContent = '0';
-      
-      if (statsData.hasToken && statsData.privateRepos > 0) {
-        const reposLabel = document.querySelector('#repos-count + div');
-        if (reposLabel) {
-          reposLabel.innerHTML = `Repos <span class="private-repos-label text-[10px]">(+${statsData.privateRepos} private)</span>`;
-        }
-      }
       
       checkAndAnimate();
     } catch (error) {
@@ -268,14 +304,6 @@ const { username } = Astro.props;
   [data-theme="black"] .stat-number {
     color: #ffffff !important;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-  
-  .private-repos-label {
-    color: oklch(var(--p));
-  }
-  
-  [data-theme="black"] .private-repos-label {
-    color: #ffffff !important;
   }
   
   .stat-card {

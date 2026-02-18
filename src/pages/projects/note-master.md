@@ -1,11 +1,14 @@
 ---
+layout: ../../layouts/ProjectLayout.astro
 title: Note Master
 url: https://notemaster-app.vercel.app/
 github: https://github.com/Blazeiscoding/notemaster-app
-tags:
-  ["Nextjs", "TypeScript", "ShadCN", "Clerk", "Bun", "PostGre", "TailwindCSS"]
+tags: ["Next.js", "TypeScript", "shadcn/ui", "Clerk", "Bun", "PostgreSQL", "Tailwind CSS"]
 date: 2025
 image: /notemaster-portfolio.webp
+description: Privacy-focused notes app with encrypted storage and a mobile-first interface.
 ---
 
-Fed up with Notion being AI overhaul , created this for myself . Made with public with personal level encryption. Mobile First UI.
+I built Note Master as a clean, focused alternative for everyday notes.
+
+It is mobile-first, privacy-focused, and designed for fast writing workflows with personal-level encryption.

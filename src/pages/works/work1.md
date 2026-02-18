@@ -1,14 +1,14 @@
 ---
-title: FreeLancer
+title: Freelancer
 date: 2024 - Present
-url: "/"
+url: "https://nikhilrathore.com"
 location: New Delhi, India
-org: Full Stack Developement
-tags: ["FullStack", "FrontEnd", "BackEnd"]
+org: Full Stack Development
+tags: ["Full Stack", "Frontend", "Backend"]
 ---
 
-- Skilled in building responsive and user-friendly web applications using modern technologies.
-- Proficient in developing full-stack solutions with clean and efficient code.
-- Experienced in using frameworks like React, Next.js, and Node.js for robust development.
-- Expertise in creating scalable backend systems and RESTful APIs.
-- Strong knowledge of frontend design with Tailwind CSS, Shadcn UI, and other libraries.
+- Build responsive and user-friendly web applications with modern frontend and backend stacks.
+- Deliver full-stack solutions with clean architecture, maintainable code, and production-ready deployments.
+- Use React, Next.js, and Node.js to ship reliable features quickly.
+- Design scalable backend systems and REST APIs for multi-feature applications.
+- Create polished frontend experiences with Tailwind CSS, shadcn/ui, and accessible component patterns.

@@ -328,4 +328,21 @@ const sameAsLinks = [
       flex-direction: column;
     }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    body::before,
+    body::after {
+      animation: none !important;
+      opacity: 0.06;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation: none !important;
+    }
+  }
 </style>

@@ -54,6 +54,8 @@ export function initScrollAnimations(): void {
 
 // Smooth scroll for anchor links
 export function initSmoothScroll(): void {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const href = (anchor as HTMLAnchorElement).getAttribute('href');
@@ -62,7 +64,7 @@ export function initSmoothScroll(): void {
         const target = document.querySelector(href);
         if (target) {
           target.scrollIntoView({
-            behavior: 'smooth',
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
             block: 'start'
           });
           history.pushState(null, '', href);

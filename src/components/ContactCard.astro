@@ -8,10 +8,9 @@ import { Icon } from "astro-icon/components";
   href={url}
   rel="noopener noreferrer"
   aria-label={`${url_name} (opens in new tab)`}
+  class="btn btn-outline btn-md mr-2 group relative overflow-hidden"
 >
-  <button class="btn btn-outline btn-md mr-2 group relative overflow-hidden" type="button">
-    <div class="absolute inset-0 bg-primary/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
-    <Icon name={icon} class="w-6 h-6 relative z-10 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
-    <span class="relative z-10">{url_name}</span>
-  </button>
+  <div class="absolute inset-0 bg-primary/10 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300"></div>
+  <Icon name={icon} class="w-6 h-6 relative z-10 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
+  <span class="relative z-10">{url_name}</span>
 </a>

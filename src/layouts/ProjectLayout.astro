@@ -1,0 +1,146 @@
+---
+import "@fontsource-variable/dm-sans";
+import "@fontsource-variable/outfit";
+import "../styles/shared.css";
+import { Icon } from "astro-icon/components";
+
+interface Frontmatter {
+  title: string;
+  description?: string;
+  date?: string | number;
+  tags?: string[];
+  image?: string;
+  url?: string;
+  github?: string;
+}
+
+interface Props {
+  frontmatter: Frontmatter;
+}
+
+const { frontmatter } = Astro.props;
+const siteUrl = "https://nikhilrathore.com";
+const pageUrl = Astro.url?.href ?? `${siteUrl}${Astro.url?.pathname ?? ""}`;
+const title = `${frontmatter.title} | Project Case Study`;
+const description =
+  frontmatter.description ??
+  `${frontmatter.title} case study by Nikhil Rathore. Architecture, stack, tradeoffs, and links.`;
+const imageUrl = frontmatter.image ? `${siteUrl}${frontmatter.image}` : `${siteUrl}/snap_laptop.webp`;
+const published = frontmatter.date ? String(frontmatter.date) : undefined;
+---
+
+<html lang="en">
+  <head>
+    <script is:inline>
+      (function() {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = savedTheme || (prefersDark ? "black" : "lofi");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.webp" />
+    <meta name="robots" content="index, follow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={imageUrl} />
+    {published && <meta property="article:published_time" content={published} />}
+    {frontmatter.tags?.length ? <meta property="article:tag" content={frontmatter.tags.join(", ")} /> : null}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        name: frontmatter.title,
+        description,
+        url: pageUrl,
+        image: imageUrl,
+        keywords: frontmatter.tags?.join(", "),
+        author: {
+          "@type": "Person",
+          name: "Nikhil Rathore",
+          url: siteUrl
+        }
+      })}
+    />
+  </head>
+  <body class="min-h-screen bg-base-100 text-base-content">
+    <main class="mx-auto max-w-3xl w-[95vw] px-4 md:px-0 py-8">
+      <a href="/#projects" class="btn btn-sm btn-ghost gap-2 mb-6" aria-label="Back to projects section">
+        <Icon name="carbon:arrow-left" class="w-4 h-4" aria-hidden="true" />
+        Back to Projects
+      </a>
+
+      <article class="glass-panel rounded-2xl p-6 md:p-8">
+        <header class="mb-6">
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">{frontmatter.title}</h1>
+          {frontmatter.description && <p class="text-base-content/75 leading-relaxed">{frontmatter.description}</p>}
+          {frontmatter.tags?.length ? (
+            <div class="flex flex-wrap gap-2 mt-4">
+              {frontmatter.tags.map((tag) => (
+                <span class="badge badge-outline">{tag}</span>
+              ))}
+            </div>
+          ) : null}
+        </header>
+
+        {frontmatter.image && (
+          <img
+            src={frontmatter.image}
+            alt={`${frontmatter.title} preview`}
+            class="w-full rounded-xl aspect-video object-cover mb-6"
+            loading="eager"
+            decoding="async"
+          />
+        )}
+
+        <div class="prose prose-sm md:prose max-w-none text-base-content/85">
+          <slot />
+        </div>
+
+        <div class="flex flex-wrap gap-3 mt-8">
+          {frontmatter.url && (
+            <a href={frontmatter.url} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm gap-2">
+              <Icon name="carbon:launch" class="w-4 h-4" aria-hidden="true" />
+              Live Project
+            </a>
+          )}
+          {frontmatter.github && (
+            <a href={frontmatter.github} target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm gap-2">
+              <Icon name="carbon:logo-github" class="w-4 h-4" aria-hidden="true" />
+              Source Code
+            </a>
+          )}
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    font-family: "DM Sans Variable", sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: "Outfit Variable", sans-serif;
+  }
+</style>

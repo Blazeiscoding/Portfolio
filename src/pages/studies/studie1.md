@@ -7,8 +7,8 @@ date: 2021-2024
 tags:
   [
     "Computer Science",
-    "FullStack Devlopment",
+    "Full Stack Development",
     "Web Development",
-    "SQL/NOSQK",
+    "SQL/NoSQL"
   ]
 ---

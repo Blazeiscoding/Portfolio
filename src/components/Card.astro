@@ -12,9 +12,10 @@ interface Props {
   location?: string;
   image?: string;
   github?: string;
+  detailsUrl?: string;
 }
 
-const { timeframe, title, description, url, tags, url_name, location, image, github } =
+const { timeframe, title, description, url, tags, url_name, location, image, github, detailsUrl } =
   Astro.props;
 ---
 
@@ -98,6 +99,16 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
         </div>
 
         <div class="self-stretch md:justify-self-end flex flex-col gap-2 items-stretch md:items-end">
+          {detailsUrl && (
+            <a
+              href={detailsUrl}
+              class="btn btn-sm btn-ghost gap-2 hover:scale-105 hover:bg-base-content/10 transition-all duration-300 group/case"
+              aria-label={`Read ${title} case study`}
+            >
+              <Icon name="carbon:document" class="w-4 h-4 group-hover/case:rotate-3 transition-transform" aria-hidden="true" />
+              <span class="hidden sm:inline">Case study</span>
+            </a>
+          )}
           {url && url !== "#" && (
             <a 
               href={url} 

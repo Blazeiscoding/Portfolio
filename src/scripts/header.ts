@@ -8,6 +8,12 @@
 export function initTypewriter(): void {
   const typewriter = document.getElementById('typewriter-text');
   if (!typewriter) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    typewriter.style.width = 'auto';
+    typewriter.style.animation = 'none';
+    return;
+  }
   
   const text = typewriter.textContent || '';
   const length = text.length;
@@ -24,6 +30,15 @@ export function initTypewriter(): void {
   typewriter.style.animation = `typing 3.5s steps(${length}, end) forwards`;
 }
 
+const COUNTER_SESSION_KEY = 'portfolio_visit_tracked';
+const COUNTER_ENDPOINT_BASE = 'https://api.countapi.xyz';
+const COUNTER_NAMESPACE = 'nikhilrathore_com';
+const COUNTER_KEY = 'portfolio_visits';
+
+function buildCounterUrl(action: 'get' | 'hit'): string {
+  return `${COUNTER_ENDPOINT_BASE}/${action}/${COUNTER_NAMESPACE}/${COUNTER_KEY}`;
+}
+
 export function initPortfolioCounter(): void {
   const projectsSection = document.getElementById('projects');
   const counterEl = document.getElementById('portfolio-counter');
@@ -33,38 +48,49 @@ export function initPortfolioCounter(): void {
   const updateDisplay = (count: number): void => {
     counterEl.textContent = count > 999 ? '999+' : count.toString();
   };
-  
-  // Fetch initial count from API
-  fetch('/api/portfolio-counter')
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        updateDisplay(data.count);
+
+  const fetchCurrentCount = async (): Promise<void> => {
+    try {
+      const response = await fetch(buildCounterUrl('get'));
+      if (!response.ok) return;
+      const data = await response.json();
+      const value = Number(data?.value);
+      if (Number.isFinite(value) && value >= 0) {
+        updateDisplay(value);
       }
-    })
-    .catch(console.error);
+    } catch {
+      // Keep default value on transient network failure
+    }
+  };
+
+  const incrementCount = async (): Promise<void> => {
+    try {
+      const response = await fetch(buildCounterUrl('hit'));
+      if (!response.ok) return;
+      const data = await response.json();
+      const value = Number(data?.value);
+      if (Number.isFinite(value) && value >= 0) {
+        updateDisplay(value);
+      }
+    } catch {
+      // Ignore increment failures for UX continuity
+    }
+  };
+
+  void fetchCurrentCount();
   
   // Track when user scrolls to portfolio section (only once per session)
-  let hasTracked = sessionStorage.getItem('portfolio_visit_tracked') === 'true';
+  let hasTracked = sessionStorage.getItem(COUNTER_SESSION_KEY) === 'true';
   
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting && !hasTracked) {
           hasTracked = true;
-          sessionStorage.setItem('portfolio_visit_tracked', 'true');
-          
-          // Increment via API
-          fetch('/api/portfolio-counter', { method: 'POST' })
-            .then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                updateDisplay(data.count);
-                counterEl.classList.add('animate-ping');
-                setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
-              }
-            })
-            .catch(console.error);
+          sessionStorage.setItem(COUNTER_SESSION_KEY, 'true');
+          void incrementCount();
+          counterEl.classList.add('animate-ping');
+          setTimeout(() => counterEl.classList.remove('animate-ping'), 300);
         }
       });
     },
@@ -77,6 +103,10 @@ export function initPortfolioCounter(): void {
 export function initProfileTilt(): void {
   const profileWrapper = document.querySelector('[data-tilt-profile]') as HTMLElement;
   if (!profileWrapper) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
   
   const inner = profileWrapper.querySelector('.profile-inner') as HTMLElement;
   

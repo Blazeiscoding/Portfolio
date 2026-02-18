@@ -4,9 +4,6 @@ import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from 'astro/config';
 
-import vercel from "@astrojs/vercel";
-import node from "@astrojs/node";
-
 // https://astro.build/config
 export default defineConfig({
   site: "https://nikhilrathore.com",
@@ -22,11 +19,7 @@ export default defineConfig({
     sitemap(), 
     compress()
   ],
-  output: "server",
-  // Default: run anywhere (VM/Docker). For Vercel builds set DEPLOY_TARGET=vercel.
-  adapter: process.env.DEPLOY_TARGET === "vercel"
-    ? vercel()
-    : node({ mode: "standalone" }),
+  output: "static",
   // Allow Caddy/remote access to astro preview on your domain
   vite: {
     preview: {
