@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
 title: Coding Shastra
-url: https://www.codingshastra.codes/
+url: https://codingshastra.nikhilrathore.com/
 github: https://github.com/Blazeiscoding/LeetLab
 tags: ["react", "nextjs", "tailwindcss", "javascript", "educational", "coding-platform"]
 date: 2025
