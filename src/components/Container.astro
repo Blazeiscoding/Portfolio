@@ -6,6 +6,7 @@ import GitHubActivity from "./GitHubActivity.astro";
 
 // TypeScript interfaces for markdown frontmatter
 interface WorkFrontmatter {
+image: string | undefined;
   title: string;
   date: string;
   tags?: string[];
@@ -57,8 +58,9 @@ const sortByDate = <T extends { frontmatter: { date: string } }>(items: T[]): T[
     const dateBStr = String(dateB);
     
     // Extract year (assumes format like "2024" or "2024 - Present")
-    const yearA = parseInt(dateAStr.split(" - ")[0]) || 0;
-    const yearB = parseInt(dateBStr.split(" - ")[0]) || 0;
+    // "Present" alone (no year) sorts to top
+    const yearA = dateAStr === "Present" ? Number.MAX_SAFE_INTEGER : (parseInt(dateAStr.split(" - ")[0]) || 0);
+    const yearB = dateBStr === "Present" ? Number.MAX_SAFE_INTEGER : (parseInt(dateBStr.split(" - ")[0]) || 0);
     
     return yearB - yearA; // Descending order (newest first)
   });
@@ -111,6 +113,9 @@ const sortedStudies = sortByDate(studies);
               url={item.frontmatter.url}
               url_name={item.frontmatter.org}
               location={item.frontmatter.location}
+              image={item.frontmatter.image}
+              imageFit={item.frontmatter.image ? "contain" : undefined}
+              imagePosition="right"
             />
           );
         })

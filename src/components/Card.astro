@@ -11,18 +11,38 @@ interface Props {
   url_name?: string;
   location?: string;
   image?: string;
+  imageFit?: "cover" | "contain";
   github?: string;
   detailsUrl?: string;
+  imagePosition?: "top" | "right";
 }
 
-const { timeframe, title, description, url, tags, url_name, location, image, github, detailsUrl } =
-  Astro.props;
+const {
+  timeframe,
+  title,
+  description,
+  url,
+  tags,
+  url_name,
+  location,
+  image,
+  imageFit = "cover",
+  github,
+  detailsUrl,
+  imagePosition = "top",
+} = Astro.props;
+
+const imageClasses =
+  imageFit === "contain"
+    ? "w-full aspect-video object-contain p-8 bg-white opacity-0 image-fade-in"
+    : "w-full aspect-video object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-0 image-fade-in";
 ---
 
 <div class="card-wrapper card-lazy-render w-full md:w-112 lg:w-128 my-4">
   <div class="card card-compact card-bordered glass-card w-full transition-all duration-500 group overflow-hidden rounded-2xl stagger-item">
     
-    {image && (
+    {/* Top image (default for projects) */}
+    {image && imagePosition === "top" && (
       <figure class="w-full overflow-hidden cursor-pointer relative">
         <a 
           href={url || "#"} 
@@ -36,26 +56,29 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
           <img
             src={image}
             alt={`${title} project screenshot`}
-            class="w-full aspect-video object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-0 image-fade-in"
+            class={imageClasses}
             loading="lazy"
             width="512"
             height="288"
             decoding="async"
             onload="this.classList.remove('opacity-0'); this.previousElementSibling?.classList.add('hidden');"
           />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-            <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-              <Icon 
-                name="carbon:view" 
-                class="w-5 h-5 text-white" 
-                aria-hidden="true"
-              />
-              <span class="text-white text-sm font-medium">View Project</span>
+          {imageFit !== "contain" && (
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+              <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                <Icon 
+                  name="carbon:view" 
+                  class="w-5 h-5 text-white" 
+                  aria-hidden="true"
+                />
+                <span class="text-white text-sm font-medium">View Project</span>
+              </div>
             </div>
-          </div>
+          )}
         </a>
       </figure>
     )}
+
     <div class="card-body relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
         <div class="self-start md:col-span-2 justify-self-start text-left">
@@ -133,6 +156,37 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
               <span class="hidden sm:inline">Code</span>
             </a>
           )}
+
+          {/* Logo in the bottom-right area */}
+          {image && imagePosition === "right" && (
+            url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${url_name || title}`}
+                class="block"
+              >
+                <div class="logo-box">
+                  <img
+                    src={image}
+                    alt={`${url_name || title} logo`}
+                    class="max-w-full max-h-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
+              </a>
+            ) : (
+              <div class="logo-box">
+                <img
+                  src={image}
+                  alt={`${url_name || title} logo`}
+                  class="max-w-full max-h-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )
+          )}
         </div>
       </div>
     </div>
@@ -142,6 +196,35 @@ const { timeframe, title, description, url, tags, url_name, location, image, git
 <style>
   .perspective-1000 {
     perspective: 1000px;
+  }
+
+  /* Logo box for right-positioned logos */
+  .logo-box {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: white;
+    padding: 0.5rem;
+    border: 1px solid oklch(var(--bc) / 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px oklch(var(--bc) / 0.08);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .logo-box:hover {
+    transform: scale(1.05);
+    border-color: oklch(var(--p) / 0.4);
+    box-shadow: 0 4px 12px oklch(var(--p) / 0.15);
+  }
+
+  @media (min-width: 768px) {
+    .logo-box {
+      width: 5.5rem;
+      height: 5.5rem;
+    }
   }
   
   /* Enhanced Glassmorphism */
