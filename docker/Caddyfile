@@ -1,0 +1,14 @@
+# Served inside the `portfolio` container. The public Caddyfile at the repo root
+# handles TLS and proxies to this on port 4321.
+:4321 {
+	root * /srv
+	encode zstd gzip
+	file_server
+
+	handle_errors {
+		rewrite * /404.html
+		file_server {
+			status {err.status_code}
+		}
+	}
+}

@@ -6,12 +6,7 @@ services:
     # Internal only (Caddy is the public entrypoint)
     expose:
       - "4321"
-    env_file:
-      - .env
-    volumes:
-      - ./data:/app/data  # Persist visitor counter data
     restart: unless-stopped
-    init: true
 
   caddy:
     image: caddy:2-alpine

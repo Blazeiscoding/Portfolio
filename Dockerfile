@@ -23,18 +23,11 @@ COPY . .
 RUN npm run build
 
 
-FROM node:20-alpine AS runner
-WORKDIR /app
+# The Astro build is `output: "static"`, so the runtime is just a file server.
+# No Node.js and no node_modules ship in the final image.
+FROM caddy:2-alpine AS runner
 
-ENV NODE_ENV=production
-ENV HOST=0.0.0.0
-ENV PORT=4321
-
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/package-lock.json ./package-lock.json
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist /srv
+COPY docker/Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 4321
-
-CMD ["node", "./dist/server/entry.mjs"]
