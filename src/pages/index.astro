@@ -6,7 +6,7 @@ import { ViewTransitions } from "astro:transitions";
 import Container from "../components/Container.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import * as about from "../pages/about/about.md";
+import * as about from "../data/about.md";
 import criticalCss from "../styles/critical.css?raw";
 
 // TypeScript interface for contact markdown files
@@ -18,12 +18,12 @@ interface ContactFile {
   };
 }
 
-const siteUrl = "https://nikhilrathore.com";
+const siteUrl = "https://www.nikhilrathore.com";
 const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
-const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. Full-Stack Developer skilled in building scalable web applications using React, Next.js, Node.js, and modern UI frameworks. Experienced in developing RESTful APIs, managing databases with PostgreSQL and MongoDB, and deploying production-ready apps.`;
+const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. React, Next.js and Node.js apps with REST APIs, PostgreSQL and MongoDB, shipped production-ready.`;
 const imageUrl = `${siteUrl}/snap_laptop.webp`;
 
-const contactLinksGlob = import.meta.glob<ContactFile>("../pages/contact/*.md", { eager: true });
+const contactLinksGlob = import.meta.glob<ContactFile>("../data/contact/*.md", { eager: true });
 const contactLinks = Object.values(contactLinksGlob);
 const sameAsLinks = [
   "https://github.com/Blazeiscoding",
@@ -74,14 +74,8 @@ const sameAsLinks = [
     
     <!-- Additional SEO -->
     <link rel="canonical" href={siteUrl} />
-    <meta name="theme-color" content="#ffffff" />
-    
-    <!-- Umami Analytics -->
-    <script
-      defer
-      src="https://cloud.umami.is/script.js"
-      data-website-id="b7245a80-bd6e-41e7-8f96-21e54336405e">
-    </script>
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
     
     <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://api.github.com" crossorigin />

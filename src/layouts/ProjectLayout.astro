@@ -19,7 +19,7 @@ interface Props {
 }
 
 const { frontmatter } = Astro.props;
-const siteUrl = "https://nikhilrathore.com";
+const siteUrl = "https://www.nikhilrathore.com";
 const pageUrl = Astro.url?.href ?? `${siteUrl}${Astro.url?.pathname ?? ""}`;
 const title = `${frontmatter.title} | Project Case Study`;
 const description =

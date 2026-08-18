@@ -14,6 +14,9 @@ interface Props {
   imageFit?: "cover" | "contain";
   github?: string;
   detailsUrl?: string;
+  /* Education cards link out to the institution, which is not something a
+     visitor would ever share from this site. */
+  share?: boolean;
   imagePosition?: "top" | "right";
 }
 
@@ -29,6 +32,7 @@ const {
   imageFit = "cover",
   github,
   detailsUrl,
+  share = true,
   imagePosition = "top",
 } = Astro.props;
 
@@ -82,7 +86,7 @@ const imageClasses =
     <div class="card-body relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
         <div class="self-start md:col-span-2 justify-self-start text-left">
-          <h2 class="card-title font-bold text-xl md:text-2xl mb-1 text-base-content group-hover:text-primary transition-colors duration-300">{title}</h2>
+          <h3 class="card-title font-bold text-xl md:text-2xl mb-1 text-base-content group-hover:text-primary transition-colors duration-300">{title}</h3>
           {location && (
             <div class="flex items-center mt-2 group/loc">
               <Icon name="carbon:location" class="w-4 h-4 mr-1 group-hover/loc:animate-bounce" aria-hidden="true" />
@@ -108,11 +112,11 @@ const imageClasses =
           {Array.isArray(tags) && (
             <div class="flex flex-wrap gap-2 my-3">
               {tags.map((item) => (
-                <span class="tag-pill badge badge-sm badge-outline text-base-content text-xs font-medium px-3 py-1.5 hover:badge-primary hover:!text-primary-content hover:border-primary hover:scale-110 hover:shadow-lg transition-all duration-200 cursor-default" :key={item}>{item}</span>
+                <span class="tag-pill badge badge-sm badge-outline text-base-content text-xs font-medium px-3 py-1.5 hover:badge-primary hover:!text-primary-content hover:border-primary hover:scale-110 hover:shadow-lg transition-all duration-200 cursor-default">{item}</span>
               ))}
             </div>
           )}
-          {url && url !== "#" && (
+          {share && url && url !== "#" && (
             <ShareButtons 
               title={title} 
               url={url} 
@@ -172,6 +176,8 @@ const imageClasses =
                     src={image}
                     alt={`${url_name || title} logo`}
                     class="max-w-full max-h-full object-contain"
+                    width="320"
+                    height="132"
                     loading="lazy"
                   />
                 </div>
@@ -182,6 +188,8 @@ const imageClasses =
                   src={image}
                   alt={`${url_name || title} logo`}
                   class="max-w-full max-h-full object-contain"
+                  width="320"
+                  height="132"
                   loading="lazy"
                 />
               </div>

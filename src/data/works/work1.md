@@ -1,7 +1,7 @@
 ---
 title: Freelancer
 date: 2024 - Present
-url: "https://nikhilrathore.com"
+url: "https://www.nikhilrathore.com"
 location: New Delhi, India
 org: Full Stack Development
 tags: ["Full Stack", "Frontend", "Backend"]

@@ -39,9 +39,9 @@ interface MarkdownFile<T> {
   url?: string;
 }
 
-const worksGlob = import.meta.glob<MarkdownFile<WorkFrontmatter>>("../pages/works/*.md", { eager: true });
+const worksGlob = import.meta.glob<MarkdownFile<WorkFrontmatter>>("../data/works/*.md", { eager: true });
 const projectsGlob = import.meta.glob<MarkdownFile<ProjectFrontmatter>>("../pages/projects/*.md", { eager: true });
-const studiesGlob = import.meta.glob<MarkdownFile<StudyFrontmatter>>("../pages/studies/*.md", { eager: true });
+const studiesGlob = import.meta.glob<MarkdownFile<StudyFrontmatter>>("../data/studies/*.md", { eager: true });
 
 const works = Object.values(worksGlob);
 const projects = Object.values(projectsGlob);
@@ -133,8 +133,9 @@ const sortedStudies = sortByDate(studies);
               timeframe={item.frontmatter.date}
               location={item.frontmatter.location}
               tags={item.frontmatter.tags}
-              url={item.url}
+              url={item.frontmatter.url}
               url_name={item.frontmatter.institute}
+              share={false}
             />
           );
         })

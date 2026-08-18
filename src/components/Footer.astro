@@ -11,7 +11,7 @@ interface MarkdownFile {
   frontmatter: ContactFrontmatter;
 }
 
-const contactGlob = import.meta.glob<MarkdownFile>("../pages/contact/*.md", { eager: true });
+const contactGlob = import.meta.glob<MarkdownFile>("../data/contact/*.md", { eager: true });
 const contacts = Object.values(contactGlob);
 
 const getYear = () => new Date().getFullYear().toString();
