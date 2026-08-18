@@ -13,6 +13,29 @@ export function initTheme(): void {
   }
 }
 
+/**
+ * Whether to play the circular-reveal View Transition on a theme switch.
+ *
+ * The reveal is the single most expensive part of switching themes: measured
+ * at 6x CPU throttle it costs ~100ms of the ~183ms main-thread hitch (82ms
+ * without it). The page's other effects - the glass cards' backdrop-filter,
+ * the noise layer, the animated gradient - together account for ~12ms, so they
+ * are not worth sacrificing.
+ *
+ * On a machine slow enough to feel that hitch the animation is what stutters,
+ * so dropping it there trades an effect that was not landing smoothly anyway
+ * for an instant switch. deviceMemory is Chromium-only; both checks fall back
+ * to a generous value so an unknown browser keeps the animation.
+ */
+function shouldAnimateThemeChange(): boolean {
+  if (typeof document.startViewTransition !== "function") return false;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+
+  const cores = navigator.hardwareConcurrency ?? 8;
+  const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
+  return cores > 4 && memory > 4;
+}
+
 // Theme toggle with View Transitions API support
 export function initThemeToggle(): void {
   const themeToggle = document.querySelector('[data-toggle-theme]') as HTMLInputElement | null;
@@ -25,7 +48,7 @@ export function initThemeToggle(): void {
   const applyTheme = (isDark: boolean): void => {
     const newTheme = isDark ? "black" : "lofi";
     
-    if (document.startViewTransition) {
+    if (shouldAnimateThemeChange()) {
       const toggle = document.getElementById('theme-toggle');
       let x = window.innerWidth / 2;
       let y = 0;
