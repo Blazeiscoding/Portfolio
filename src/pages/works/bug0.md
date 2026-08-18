@@ -5,5 +5,5 @@ org: Bug0
 image: /logo.png
 ---
 
-- Working as a Software Engineer, building and maintaining reliable software for Bug0.
+- Working as a Software Engineer and Forward Deployed Engineer, building and maintaining reliable software for Bug0.
 - Collaborate on product development, implementation, and ongoing technical improvements.
