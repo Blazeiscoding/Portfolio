@@ -9,25 +9,46 @@ export function initTypewriter(): void {
   const typewriter = document.getElementById('typewriter-text');
   if (!typewriter) return;
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  // Hand sizing back to the content. The animation needs a pixel width to
+  // interpolate towards, but a measured pixel width is only ever a snapshot,
+  // so the finished state should not keep it.
+  const fitToContent = (): void => {
     typewriter.style.width = 'auto';
     typewriter.style.animation = 'none';
+  };
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    fitToContent();
     return;
   }
-  
-  const text = typewriter.textContent || '';
-  const length = text.length;
-  
-  typewriter.style.width = 'auto';
-  typewriter.style.animation = 'none';
-  const width = typewriter.offsetWidth;
-  
-  typewriter.style.setProperty('--typewriter-width', `${width}px`);
-  typewriter.style.setProperty('--typewriter-steps', length.toString());
-  
-  void typewriter.offsetWidth; // Force reflow
-  typewriter.style.width = '0';
-  typewriter.style.animation = `typing 3.5s steps(${length}, end) forwards`;
+
+  const start = (): void => {
+    const length = (typewriter.textContent || '').length;
+
+    typewriter.style.width = 'auto';
+    typewriter.style.animation = 'none';
+    const width = typewriter.offsetWidth;
+
+    typewriter.style.setProperty('--typewriter-width', `${width}px`);
+    typewriter.style.setProperty('--typewriter-steps', length.toString());
+
+    void typewriter.offsetWidth; // Force reflow
+    typewriter.style.width = '0';
+    typewriter.style.animation = `typing 3.5s steps(${length}, end) forwards`;
+
+    // `forwards` would otherwise hold the measured width for good, leaving a
+    // gap between the last character and the cursor.
+    typewriter.addEventListener('animationend', fitToContent, { once: true });
+  };
+
+  // Measuring before the webfont swaps in uses the fallback's metrics, which
+  // are wider here - that overshoot was leaving ~12px of dead space inside the
+  // span, so wait for the real font before taking the measurement.
+  if (document.fonts && document.fonts.status !== 'loaded') {
+    document.fonts.ready.then(start, start);
+  } else {
+    start();
+  }
 }
 
 const COUNTER_SESSION_KEY = 'portfolio_visit_tracked';
