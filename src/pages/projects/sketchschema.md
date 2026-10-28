@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
 title: SketchSchema
-url: https://sketchema.vercel.app/
+live: https://sketchema.vercel.app/
 github: https://github.com/Blazeiscoding
 tags: ["AI", "Prisma", "Drizzle ORM", "PostgreSQL", "MySQL", "Diagram to Schema"]
 date: 2026

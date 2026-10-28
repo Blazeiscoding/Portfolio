@@ -22,7 +22,7 @@ The filename becomes the URL slug, so use lowercase kebab-case: `ownbase.md` →
 ---
 layout: ../../layouts/ProjectLayout.astro
 title: SketchSchema
-url: https://sketchema.vercel.app/
+live: https://sketchema.vercel.app/
 github: https://github.com/Blazeiscoding/sketchschema
 tags: ["AI", "Prisma", "PostgreSQL"]
 date: 2026
@@ -40,7 +40,7 @@ homepage card and on the project's own case-study page.
 | `title` | ✅ | Card heading and page title |
 | `date` | ✅ | Year, or a range like `2024 - Present`. Used for sorting (see [Sorting](#sorting)) |
 | `description` | — | Used for `<meta name="description">`, OG and Twitter cards. Falls back to a generated sentence |
-| `url` | — | Live demo link ("View project" button) |
+| `live` | — | Live demo link ("View project" on the card, "Live Project" on its page). Not `url`: Astro sets that to the page's own path |
 | `github` | — | Source repository link |
 | `tags` | — | String array rendered as badges |
 | `image` | — | Path under `public/`, e.g. `/my-project.webp` — see [Images](#images) |

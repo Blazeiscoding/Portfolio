@@ -19,7 +19,7 @@ interface ProjectFrontmatter {
   title: string;
   date: string;
   tags?: string[];
-  url?: string;
+  live?: string;
   image?: string;
   github?: string;
 }
@@ -83,7 +83,7 @@ const sortedStudies = sortByDate(studies);
               timeframe={item.frontmatter.date}
               description={item.compiledContent()}
               tags={item.frontmatter.tags}
-              url={item.frontmatter.url}
+              url={item.frontmatter.live}
               url_name={"View project"}
               image={item.frontmatter.image}
               github={item.frontmatter.github}

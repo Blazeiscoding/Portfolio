@@ -1,7 +1,7 @@
 ---
 layout: ../../layouts/ProjectLayout.astro
 title: Better-learn
-url: https://www.better-learn.tech/
+live: https://www.better-learn.tech/
 tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "E2B", "BullMQ", "GitHub App", "Tailwind CSS"]
 date: 2026
 image: /better-learn-portfolio.webp
