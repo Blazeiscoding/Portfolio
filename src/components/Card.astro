@@ -49,7 +49,7 @@ const imageClasses =
     {image && imagePosition === "top" && (
       <figure class="w-full overflow-hidden cursor-pointer relative">
         <a 
-          href={url || "#"} 
+          href={url || detailsUrl || "#"}
           target={url ? "_blank" : undefined}
           rel={url ? "noopener noreferrer" : undefined}
           aria-label={`View ${title} project`}

@@ -8,7 +8,7 @@
 % THIS MUST STAY ONE PAGE. An earlier draft ran to two, spilling the Education
 % section onto page 2; roughly ten lines have been cut since, so there is a few
 % lines of slack now. Recompile and check the page count after editing. If it
-% spills again, the cheapest fixes in order: cut the Note Master project, drop
+% spills again, the cheapest fixes in order: cut the SketchSchema project, drop
 % the Summary block, then fall back to 10pt in the \documentclass line below.
 %
 % Project heading titles sit in an `l` column of a tabular*, which does not
@@ -143,6 +143,15 @@ design, PostgreSQL and MongoDB, and shipping production-ready apps with clean, m
   \resumeSubHeadingListStart
 
     \resumeProjectHeading
+      {\textbf{OwnBase} $|$ \emph{TypeScript, React, Electron, Node.js, SQLite, WebRTC} $|$ \href{https://github.com/Blazeiscoding/OwnBase}{\underline{github.com/Blazeiscoding/OwnBase}}}{2026}
+      \resumeItemListStart
+        \resumeItem{Built open-source team chat you host yourself, on a VPS or straight from the desktop app on your own PC.}
+        \resumeItem{Designed real-time sync on a per-workspace WebSocket event log, with optimistic sends and replay on reconnect.}
+        \resumeItem{Added WebRTC calls with audio, video, and screen share, plus a Slack-compatible API for bots and webhooks.}
+        \resumeItem{Built OIDC single sign-on, signed license keys, and a control plane that hosts many workspaces behind Caddy.}
+      \resumeItemListEnd
+
+    \resumeProjectHeading
       {\textbf{Better-learn} $|$ \emph{Next.js, TypeScript, Prisma, PostgreSQL, Redis, E2B} $|$ \href{https://www.better-learn.tech}{\underline{better-learn.tech}}}{2026}
       \resumeItemListStart
         \resumeItem{Built a GitHub Classroom alternative: teachers publish assignments from template repos and every student push is graded automatically in an isolated sandbox.}
@@ -163,12 +172,6 @@ design, PostgreSQL and MongoDB, and shipping production-ready apps with clean, m
         \resumeItem{Educational coding platform with structured lessons, practice tracks, and challenge-based progress.}
         \resumeItem{Built REST APIs with Express and Prisma on PostgreSQL, with JWT auth and bcrypt password hashing.}
         \resumeItem{Created an interactive Monaco-based code editor with syntax highlighting and real-time compilation.}
-      \resumeItemListEnd
-
-    \resumeProjectHeading
-      {\textbf{Note Master} $|$ \emph{Next.js, TypeScript, Clerk, PostgreSQL} $|$ \href{https://notemaster-app.vercel.app/}{\underline{notemaster-app.vercel.app}}}{2025}
-      \resumeItemListStart
-        \resumeItem{Privacy-focused, mobile-first notes app with personal-level encryption, Clerk auth, and a PostgreSQL API.}
       \resumeItemListEnd
 
   \resumeSubHeadingListEnd

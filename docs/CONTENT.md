@@ -10,7 +10,7 @@ All visible content lives in Markdown under `src/pages/`. `src/components/Contai
 | Contact links | `src/pages/contact/` | Footer icons + `sameAs` in the homepage JSON-LD |
 | About / bio | `src/pages/about/about.md` | Header, page title, meta description, JSON-LD |
 
-The filename becomes the URL slug, so use lowercase kebab-case: `note-master.md` → `/projects/note-master`.
+The filename becomes the URL slug, so use lowercase kebab-case: `ownbase.md` → `/projects/ownbase`.
 
 ---
 
