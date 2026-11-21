@@ -2,7 +2,7 @@
 layout: ../../layouts/ProjectLayout.astro
 title: Better-learn
 live: https://www.better-learn.tech/
-tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "E2B", "BullMQ", "GitHub App", "Tailwind CSS"]
+tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "Redis", "E2B", "BullMQ", "GitHub App", "Tailwind CSS"]
 date: 2026
 image: /better-learn-portfolio.webp
 description: GitHub Classroom alternative that auto-grades every student push in an isolated sandbox.

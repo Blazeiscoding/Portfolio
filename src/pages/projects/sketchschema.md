@@ -3,7 +3,7 @@ layout: ../../layouts/ProjectLayout.astro
 title: SketchSchema
 live: https://sketchema.vercel.app/
 github: https://github.com/Blazeiscoding
-tags: ["AI", "Prisma", "Drizzle ORM", "PostgreSQL", "MySQL", "Diagram to Schema"]
+tags: ["Next.js", "AI", "Prisma", "Drizzle ORM", "PostgreSQL", "MySQL", "Diagram to Schema"]
 date: 2026
 image: /Sketchschema.webp
 description: AI-powered tool that turns database diagrams into production-ready Prisma and Drizzle schemas.

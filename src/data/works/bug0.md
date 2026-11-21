@@ -1,9 +1,10 @@
 ---
-title: Software Engineer
+title: Software Engineer & Forward Deployed Engineer
 date: 2026 - Present
 org: Bug0
+location: New Delhi, India
 image: /logo.webp
 ---
 
-- Working as a Software Engineer and Forward Deployed Engineer, building and maintaining reliable software for Bug0.
+- Build and maintain reliable production software as part of the engineering team.
 - Collaborate on product development, implementation, and ongoing technical improvements.
