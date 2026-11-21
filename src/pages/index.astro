@@ -21,7 +21,7 @@ interface ContactFile {
 const siteUrl = "https://www.nikhilrathore.com";
 const siteName = `${about.frontmatter.name} - ${about.frontmatter.designation}`;
 const description = `${about.frontmatter.name} - ${about.frontmatter.designation}. React, Next.js and Node.js apps with REST APIs, PostgreSQL and MongoDB, shipped production-ready.`;
-const imageUrl = `${siteUrl}/snap_laptop.webp`;
+const imageUrl = `${siteUrl}/og-image.webp`;
 
 const contactLinksGlob = import.meta.glob<ContactFile>("../data/contact/*.md", { eager: true });
 const contactLinks = Object.values(contactLinksGlob);
@@ -104,7 +104,9 @@ const sameAsLinks = [
         "addressLocality": about.frontmatter.location.split(",")[1]?.trim() || about.frontmatter.location,
         "addressCountry": "IN"
       },
-      "image": imageUrl,
+      "image": `${siteUrl}/profile.webp`,
+      "worksFor": { "@type": "Organization", "name": "Bug0" },
+      "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of Delhi", "url": "https://www.du.ac.in/" },
       "description": description
     })} />
     <ViewTransitions />

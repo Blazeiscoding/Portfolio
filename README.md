@@ -13,7 +13,7 @@ Content lives in Markdown, the site ships as static HTML, and everything is them
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-<img src="public/snap_laptop.webp" alt="Screenshot of the portfolio homepage on a laptop" width="720" />
+<img src="public/og-image.webp" alt="Screenshot of the portfolio homepage" width="720" />
 
 </div>
 
